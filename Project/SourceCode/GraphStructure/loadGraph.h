@@ -6,12 +6,12 @@
 #include <fstream>
 #include "Graph.h"
 
-bool loadGraph(const std::string& vertex_filename, const std::string& edge_filename, Graph* g) {
+void loadGraph(const std::string& vertex_filename, const std::string& edge_filename, Graph* g) {
     std::ifstream vertex_file(vertex_filename);
 
     if(!vertex_file.is_open()) {
         std::cerr << "Error opening file " << vertex_filename << std::endl;
-        return false;
+        exit(1);
     }
 
     std::string line;
@@ -46,7 +46,7 @@ bool loadGraph(const std::string& vertex_filename, const std::string& edge_filen
 
     if (!edge_file.is_open()) {
         std::cerr << "Error opening file " << edge_filename << std::endl;
-        return false;
+        exit(1);
     }
 
     std::getline(edge_file, line); // skip the first line
@@ -72,13 +72,11 @@ bool loadGraph(const std::string& vertex_filename, const std::string& edge_filen
         std::stringstream walk(line);
         walk >> walkingtime;
 
-        if (g->findVertex(vertex1)==nullptr || g->findVertex(vertex2)==nullptr) {
+        if (!g->addBidirectionalEdge(vertex1, vertex2, drivingtime, walkingtime)) {
             std::cerr << "Edge contains vertex that not exists" << std::endl;
-            return false;
+            exit(1);
         }
-        g->addEdge(vertex1, vertex2, drivingtime, walkingtime);
     }
     edge_file.close();
-    return true;
 }
 #endif
