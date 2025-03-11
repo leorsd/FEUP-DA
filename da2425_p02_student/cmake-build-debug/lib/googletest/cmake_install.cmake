@@ -1,4 +1,4 @@
-# Install script for directory: /home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/lib/googletest
+# Install script for directory: /home/leandro/Uni/DA/da2425_p02_student/lib/googletest
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/cmake-build-debug/lib/googletest/googlemock/cmake_install.cmake")
+  include("/home/leandro/Uni/DA/da2425_p02_student/cmake-build-debug/lib/googletest/googlemock/cmake_install.cmake")
 
 endif()
 

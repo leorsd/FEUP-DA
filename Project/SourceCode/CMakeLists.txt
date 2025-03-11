@@ -10,18 +10,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Define the source files
 set(SOURCES
         main.cpp
-        GraphStructure/Graph.cpp
+        GraphStructure/graph.cpp
+        GraphStructure/loadGraph.cpp
+        BatchModeReader/batchReader.cpp
+
 )
 
 # Define the header files
 set(HEADERS
-        GraphStructure/Graph.h
+        GraphStructure/graph.h
         GraphStructure/loadGraph.h
-        batchMode.h
+        BatchModeReader/batchReader.h
 )
 
 # Include directories
-include_directories(${CMAKE_SOURCE_DIR}/SourceCode)
+include_directories(
+        ${CMAKE_SOURCE_DIR}/GraphStructure
+        ${CMAKE_SOURCE_DIR}/BatchModeReader
+)
 
 # Create the executable
-add_executable(DA_Project ${SOURCES} ${HEADERS})
+add_executable(DA_Project ${SOURCES})

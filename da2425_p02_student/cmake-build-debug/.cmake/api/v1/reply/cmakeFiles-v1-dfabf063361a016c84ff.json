@@ -915,8 +915,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/cmake-build-debug",
-		"source" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student"
+		"build" : "/home/leandro/Uni/DA/da2425_p02_student/cmake-build-debug",
+		"source" : "/home/leandro/Uni/DA/da2425_p02_student"
 	},
 	"version" : 
 	{

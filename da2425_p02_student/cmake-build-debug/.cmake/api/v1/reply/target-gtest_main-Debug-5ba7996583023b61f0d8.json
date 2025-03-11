@@ -97,12 +97,12 @@
 				{
 					"backtrace" : 7,
 					"isSystem" : true,
-					"path" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/lib/googletest/googletest/include"
+					"path" : "/home/leandro/Uni/DA/da2425_p02_student/lib/googletest/googletest/include"
 				},
 				{
 					"backtrace" : 7,
 					"isSystem" : true,
-					"path" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/lib/googletest/googletest"
+					"path" : "/home/leandro/Uni/DA/da2425_p02_student/lib/googletest/googletest"
 				}
 			],
 			"language" : "CXX",

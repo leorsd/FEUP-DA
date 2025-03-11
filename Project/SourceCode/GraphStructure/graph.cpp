@@ -1,4 +1,5 @@
-#include "Graph.h"
+#include "graph.h"
+
 /************************* Vertex  **************************/
 
 Vertex::Vertex(std::string location, int id, std::string code, bool parking) {

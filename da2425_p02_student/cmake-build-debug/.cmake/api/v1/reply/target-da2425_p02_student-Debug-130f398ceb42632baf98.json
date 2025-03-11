@@ -68,21 +68,21 @@
 			[
 				{
 					"backtrace" : 3,
-					"path" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/lib/googletest/googlemock/include"
+					"path" : "/home/leandro/Uni/DA/da2425_p02_student/lib/googletest/googlemock/include"
 				},
 				{
 					"backtrace" : 4,
-					"path" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/TP2"
+					"path" : "/home/leandro/Uni/DA/da2425_p02_student/TP2"
 				},
 				{
 					"backtrace" : 5,
 					"isSystem" : true,
-					"path" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/lib/googletest/googletest/include"
+					"path" : "/home/leandro/Uni/DA/da2425_p02_student/lib/googletest/googletest/include"
 				},
 				{
 					"backtrace" : 2,
 					"isSystem" : true,
-					"path" : "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/lib/googletest/googletest"
+					"path" : "/home/leandro/Uni/DA/da2425_p02_student/lib/googletest/googletest"
 				}
 			],
 			"language" : "CXX",

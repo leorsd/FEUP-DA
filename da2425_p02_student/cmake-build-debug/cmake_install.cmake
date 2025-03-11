@@ -1,4 +1,4 @@
-# Install script for directory: /home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student
+# Install script for directory: /home/leandro/Uni/DA/da2425_p02_student
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/cmake-build-debug/lib/googletest/cmake_install.cmake")
+  include("/home/leandro/Uni/DA/da2425_p02_student/cmake-build-debug/lib/googletest/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -62,6 +62,6 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-  file(WRITE "/home/leandro/Uni/DA/da2425_p02_student/da2425_p02_student/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+  file(WRITE "/home/leandro/Uni/DA/da2425_p02_student/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
 endif()

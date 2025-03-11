@@ -1,4 +1,4 @@
-#include "GraphStructure/Graph.h"
+#include "graph.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -6,13 +6,13 @@
 #include <vector>
 #include <regex>
 
-void batchMode(Graph* g) {
+void batchMode(Graph* g, int algorithm) {
 
     std::ifstream input_file("../Data/input.txt");
 
     if (!input_file.is_open()) {
-    std::cerr << "Error opening input.txt.\n";
-    exit(1);
+        std::cerr << "Error opening input.txt.\n";
+        exit(1);
     }
 
     std::string line;
@@ -79,5 +79,20 @@ void batchMode(Graph* g) {
         }
     }
     input_file.close();
+
+    if ( g->findVertex(sourceId) == nullptr || g->findVertex(destId) == nullptr ) {
+      std::cerr << "Source or Destination Nodes do not exist in graph." << std::endl;
+      exit(1);
+    }
+
+    switch (algorithm) {
+      case 1:
+        //call normal algorithm
+        break;
+      case 2:
+
+    }
+
+
     return;
 }
