@@ -10,7 +10,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
   std::cout<<"Restricted Route "<<std::endl;
 }
 
-void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode, int maxWalkTime){
+void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime){
   //Implement task T3.1
   std::cout<<"Best Route "<<std::endl;
 }

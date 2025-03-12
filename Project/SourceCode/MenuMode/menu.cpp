@@ -238,9 +238,8 @@ void runMenuMode(Graph* graph){
         destNode = askDestId(graph);
         askAvoidNodes(graph);
         askAvoidEdges(graph);
-        includeNode = askIncludeNode(graph);
         maxWalkTime = askMaxWalkTime(graph);
-        bestRouteDrivingWalking(graph, sourceNode, destNode, includeNode, maxWalkTime);
+        bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime);
         break;
       default:
         break;

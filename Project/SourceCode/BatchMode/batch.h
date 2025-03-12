@@ -2,6 +2,7 @@
 #define BATCHREADER_H
 
 #include "graph.h"
+#include "algorithms.h"
 #include <sstream>
 #include <fstream>
 
