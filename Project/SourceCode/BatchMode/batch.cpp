@@ -4,7 +4,7 @@ bool startsWith(const std::string& line, const std::string& prefix) {
     return line.substr(0, prefix.length()) == prefix;
 }
 
-Vertex* getNode(std::string line, Graph* graph) {
+Vertex* getNode(const std::string& line, Graph* graph) {
   Vertex* node = nullptr;
   try{
     int id=std::stoi(line);
