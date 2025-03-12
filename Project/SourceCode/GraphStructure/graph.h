@@ -28,6 +28,7 @@ public:
     double getDist() const;
     Edge *getPath() const;
     std::vector<Edge *> getIncoming() const;
+    bool getAvoid() const;
 
     void setId(int id);
     void setCode(std::string code);
@@ -38,6 +39,7 @@ public:
     void setIndegree(unsigned int indegree);
     void setDist(double dist);
     void setPath(Edge *path);
+    void setAvoid(bool avoid);
 
     Edge *addEdge(Vertex *dest, double drivingTime, double walkingTime);
     bool removeEdge(const std::string &code);
@@ -48,6 +50,7 @@ protected:
     std::string location;      // Location name
     std::string code;          // Unique code
     bool parking;              // Parking availability
+    bool avoid = false;               // Used for algorithsm that need to avoid vertexs
 
     std::vector<Edge *> adj;   // Outgoing edges
 
@@ -72,6 +75,7 @@ public:
     Vertex *getDest() const;
     double getDrivingTime() const;
     double getWalkingTime() const;
+    bool getAvoid() const;
 
     bool isSelected() const;
     Edge *getReverse() const;
@@ -80,12 +84,14 @@ public:
     void setWalkingTime(double walkingTime);
     void setSelected(bool selected);
     void setReverse(Edge *reverse);
+    void setAvoid(bool avoid);
 
 protected:
     Vertex *orig;  // Origin vertex
     Vertex *dest;  // Destination vertex
     double drivingTime;
     double walkingTime;
+    bool avoid = false;    // Used for algorithms that need to avoid edges
 
     // Auxiliary fields
     bool selected = false;

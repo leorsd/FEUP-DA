@@ -57,6 +57,7 @@ unsigned int Vertex::getIndegree() const { return this->indegree; }
 double Vertex::getDist() const { return this->dist; }
 Edge *Vertex::getPath() const { return this->path; }
 std::vector<Edge *> Vertex::getIncoming() const { return this->incoming; }
+bool Vertex::getAvoid() const { return this->avoid; }
 
 void Vertex::setId(int id) { this->id = id; }
 void Vertex::setLocation(std::string location) { this->location = location; }
@@ -67,6 +68,7 @@ void Vertex::setProcessing(bool processing) { this->processing = processing; }
 void Vertex::setIndegree(unsigned int indegree) { this->indegree = indegree; }
 void Vertex::setDist(double dist) { this->dist = dist; }
 void Vertex::setPath(Edge *path) { this->path = path; }
+void Vertex::setAvoid(bool avoid) { this->avoid = avoid; }
 
 void Vertex::deleteEdge(const Edge *edge) const {
     Vertex *dest = edge->getDest();
@@ -96,6 +98,9 @@ double Edge::getWalkingTime() const { return this->walkingTime; }
 Vertex *Edge::getOrig() const { return this->orig; }
 Edge *Edge::getReverse() const { return this->reverse; }
 bool Edge::isSelected() const { return this->selected; }
+bool Edge::getAvoid() const { return this->avoid; }
+
+void Edge::setAvoid(bool avoid) { this->avoid = avoid; }
 void Edge::setSelected(bool selected) { this->selected = selected; }
 void Edge::setReverse(Edge *reverse) { this->reverse = reverse; }
 void Edge::setDrivingTime(double drivingTime) { this->drivingTime = drivingTime; }
