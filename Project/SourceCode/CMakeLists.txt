@@ -17,6 +17,7 @@ set(SOURCES
         MenuMode/menu.cpp
         Algorithms/algorithms.cpp
         DisplayOutput/displayBatch.cpp
+        DisplayOutput/displayMenu.cpp
 )
 
 # Define the header files
@@ -28,6 +29,7 @@ set(HEADERS
         MenuMode/menu.h
         Algorithms/algorithms.h
         DisplayOutput/displayBatch.h
+        DisplayOutput/displayMenu.h
 )
 
 # Include directories
