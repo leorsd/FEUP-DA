@@ -3,6 +3,7 @@
 
 #include "graph.h"
 #include "algorithms.h"
+#include "displayBatch.h"
 #include <sstream>
 #include <fstream>
 

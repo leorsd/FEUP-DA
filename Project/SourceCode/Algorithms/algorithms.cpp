@@ -1,10 +1,4 @@
-// algorithms.cpp
 #include "algorithms.h"
-#include <stack>
-#include "MutablePriorityQueue.h"
-#include <iostream>
-#include <sstream>
-#include <iomanip>
 
 bool relax(Edge *edge) {
     Vertex *org = edge->getOrig();
@@ -18,12 +12,14 @@ bool relax(Edge *edge) {
     return false;
 }
 
-void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode = nullptr) {
+void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode) {
     auto *pq = new MutablePriorityQueue();
     for (Vertex *v : g->getVertexSet()) {
-        v->setPath(nullptr);
-        v->setDist(INF);
-        pq->insert(v);
+        if (!v->getAvoid()){
+            v->setPath(nullptr);
+            v->setDist(INF);
+            pq->insert(v);
+        }
     }
     sourceNode->setDist(0);
     pq->decreaseKey(sourceNode);
@@ -31,14 +27,12 @@ void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode = nullptr) {
     while (!pq->empty()) {
         Vertex *v = pq->extractMin();
 
-        if(v->getAvoid()) continue;
-
         for (Edge *e : v->getAdj()) {
-            if (!e->getAvoid() && relax(e)) {
+            if (!e->getAvoid() && !e->getDest()->getAvoid() && relax(e)) {
                 pq->decreaseKey(e->getDest());
             }
         }
-        if(destNode && v == destNode){
+        if(v == destNode){
           delete pq;
           return;
         }
@@ -46,80 +40,51 @@ void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode = nullptr) {
     delete pq;
 }
 
-void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode) {
-    std::stringstream bestRouteStr;
-    std::stringstream alternativeRouteStr;
-    int bestRouteTime = 0;
-    int alternativeRouteTime = 0;
+void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::list<int>* bestRoute, int* bestRouteTime, std::list<int>* alternativeRoute, int* alternativeRouteTime) {
+    *bestRouteTime = 0;
+    *alternativeRouteTime = 0;
 
 
-    dijkstra(graph, sourceNode);
-    std::stack<Vertex *> bestRouteStack;
+    dijkstra(graph, sourceNode, destNode);
+
     Vertex *current = destNode;
-    while (current && current->getPath()) {
-        bestRouteStack.push(current);
-        bestRouteTime += current->getPath()->getDrivingTime();
+    while (current->getPath()) {
+
+        current->getPath()->setAvoid(true);
+        current->getPath()->getOrig()->setAvoid(true);
+
+        bestRoute->push_front(current->getId());
+        *bestRouteTime += current->getPath()->getDrivingTime();
+
         current = current->getPath()->getOrig();
     }
-    bestRouteStack.push(sourceNode);
+    bestRoute->push_front(sourceNode->getId());
+    sourceNode->setAvoid(false);
 
-    if (bestRouteStack.size() == 1 && bestRouteStack.top() != destNode) {
-        // output para quando não há melhor caminho e, por consequência não há caminho alternativo
-    } else {
-        std::vector<Vertex *> bestRoute;
-        while (!bestRouteStack.empty()) {
-            bestRoute.push_back(bestRouteStack.top());
-            bestRouteStack.pop();
-        }
-
-        for (std::size_t i = 0; i < bestRoute.size(); ++i) {
-            bestRoute[i]->setAvoid(true);
-        }
-
-        for (std::size_t i = 0; i < bestRoute.size() - 1; i++) {
-            for (Edge *edge : bestRoute[i]->getAdj()) {
-                if (edge->getDest()->getId() == bestRoute[i + 1]->getId()) {
-                    edge->setAvoid(true);
-                }
-            }
-        }
-
-        // 
-
-
-        dijkstra(graph, sourceNode);
-        std::stack<Vertex *> alternativeRouteStack;
-        current = destNode;
-        while (current && current->getPath()) {
-            alternativeRouteStack.push(current);
-            alternativeRouteTime += current->getPath()->getDrivingTime();
-            current = current->getPath()->getOrig();
-        }
-        alternativeRouteStack.push(sourceNode);
-
-        if (alternativeRouteStack.size() == 1 && alternativeRouteStack.top() != destNode) {
-               // não há caminho alternativo
-        } else {
-            std::vector<Vertex *> alternativeRoute;
-            while (!alternativeRouteStack.empty()) {
-                alternativeRoute.push_back(alternativeRouteStack.top());
-                alternativeRouteStack.pop();
-            }
-        }
-
-
-        for (Vertex *v : bestRoute) {
-            v->setAvoid(false);
-        }
-        for (std::size_t i = 0; i < bestRoute.size() - 1; i++) {
-            for (Edge *edge : bestRoute[i]->getAdj()) {
-                if (edge->getDest()->getId() == bestRoute[i + 1]->getId()) {
-                    edge->setAvoid(false);
-                }
-            }
-        }
+    if(bestRoute->size() == 1) {
+      return;
     }
 
+        // Alternarive route
+
+
+    dijkstra(graph, sourceNode, destNode);
+    current = destNode;
+    while (current && current->getPath()) {
+        alternativeRoute->push_front(current->getId());
+        *alternativeRouteTime += current->getPath()->getDrivingTime();
+        current = current->getPath()->getOrig();
+    }
+    alternativeRoute->push_front(sourceNode->getId());
+
+    for (Vertex *v : graph->getVertexSet()) {
+        v->setAvoid(false);
+        v->setPath(nullptr);
+        v->setDist(0);
+        for (Edge *e : v->getAdj()) {
+            e->setAvoid(false);
+        }
+    }
 }
 
 void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode){

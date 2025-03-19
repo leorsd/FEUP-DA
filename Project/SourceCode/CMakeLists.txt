@@ -12,18 +12,22 @@ set(SOURCES
         main.cpp
         GraphStructure/graph.cpp
         GraphStructure/loadGraph.cpp
+        GraphStructure/mutablePriorityQueue.cpp
         BatchMode/batch.cpp
         MenuMode/menu.cpp
         Algorithms/algorithms.cpp
+        DisplayOutput/displayBatch.cpp
 )
 
 # Define the header files
 set(HEADERS
         GraphStructure/graph.h
         GraphStructure/loadGraph.h
+        GraphStructure/mutablePriorityQueue.h
         BatchMode/batch.h
         MenuMode/menu.h
         Algorithms/algorithms.h
+        DisplayOutput/displayBatch.h
 )
 
 # Include directories
@@ -32,6 +36,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/BatchMode
         ${CMAKE_SOURCE_DIR}/MenuMode
         ${CMAKE_SOURCE_DIR}/Algorithms
+        ${CMAKE_SOURCE_DIR}/DisplayOutput
 )
 
 # Create the executable

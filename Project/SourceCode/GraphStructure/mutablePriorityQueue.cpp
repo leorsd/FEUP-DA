@@ -1,21 +1,4 @@
-#ifndef DA_TP_CLASSES_MUTABLEPRIORITYQUEUE
-#define DA_TP_CLASSES_MUTABLEPRIORITYQUEUE
-
-#include <vector>
-#include "Graph.h"
-
-class MutablePriorityQueue {
-    std::vector<Vertex *> H;
-    void heapifyUp(unsigned i);
-    void heapifyDown(unsigned i);
-    inline void set(unsigned i, Vertex * x);
-public:
-    MutablePriorityQueue();
-    void insert(Vertex * x);
-    Vertex * extractMin();
-    void decreaseKey(Vertex * x);
-    bool empty();
-};
+#include "mutablePriorityQueue.h"
 
 #define parent(i) ((i) / 2)
 #define leftChild(i) ((i) * 2)
@@ -72,5 +55,3 @@ void MutablePriorityQueue::set(unsigned i, Vertex *x) {
     H[i] = x;
     x->queueIndex = i;
 }
-
-#endif /* DA_TP_CLASSES_MUTABLEPRIORITYQUEUE */

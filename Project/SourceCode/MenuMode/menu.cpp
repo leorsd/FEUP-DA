@@ -219,11 +219,17 @@ void runMenuMode(Graph* graph){
     }
     Vertex* sourceNode,*destNode, *includeNode;
     int maxWalkTime = 0;
+
+    std::list<int> bestRoute = {};
+    std::list<int> alternativeRoute = {};
+    int bestRouteTime = 0;
+    int alternativeRouteTime = 0;
+
     switch (alg) {
       case 1:
         sourceNode = askSourceId(graph);
         destNode = askDestId(graph);
-        independentRoute(graph, sourceNode, destNode);
+        independentRoute(graph, sourceNode, destNode, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
         break;
       case 2:
         sourceNode = askSourceId(graph);
