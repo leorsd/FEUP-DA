@@ -242,6 +242,9 @@ void runMenuMode(Graph* graph){
             includeNode = askIncludeNode(graph);
 
             restrictedRoute(graph, sourceNode, destNode, includeNode, &bestRoute, &bestRouteTime);
+
+            displayMenuRestrictedRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime);
+
             break;
         case 3:
             sourceNode = askSourceId(graph);
