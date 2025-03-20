@@ -196,6 +196,7 @@ void runBatchMode(Graph* graph){
         }
     }
     input_file.close();
+
 	if(!sourceNode){
 		std::cout<<"ERROR: Invalid input! Source node not provided."<<std::endl;
 		return;
@@ -204,11 +205,21 @@ void runBatchMode(Graph* graph){
 		std::cout<<"ERROR: Invalid input! Destination node not provided."<<std::endl;
 		return;
 	}
+
     if (mode=="driving" && !maxWalkTimeProvided) {
 		if (incProvided && avoidNodesProvided && avoidSegmentsProvided) {
         	restrictedRoute(graph, sourceNode, destNode, incNode);
 		}else if(!incProvided && !avoidNodesProvided && !avoidSegmentsProvided){
-            independentRoute(graph, sourceNode, destNode);
+
+            std::list<int> bestRoute = {};
+            std::list<int> alternativeRoute = {};
+            int bestRouteTime;
+            int alternativeRouteTime;
+
+            independentRoute(graph, sourceNode, destNode, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
+
+			displayBatchIndependentRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime);
+
 		}else{
             std::cout<<"ERROR: Invalid sintax in input.txt, missing some statements."<<std::endl;
             return;

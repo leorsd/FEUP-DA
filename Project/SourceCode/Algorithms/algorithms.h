@@ -1,9 +1,19 @@
 #ifndef ALGORITHMS_H
 #define ALGORITHMS_H
 
+#include <stack>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
+#include <list>
 #include "graph.h"
+#include "mutablePriorityQueue.h"
 
-void independentRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode);
+bool relax(Edge *edge);
+
+void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode);
+
+void independentRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, std::list<int>* bestRoute, int* bestRouteTime, std::list<int>* alternativeRoute, int* alternativeRouteTime);
 
 void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode);
 

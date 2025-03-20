@@ -45,6 +45,8 @@ public:
     bool removeEdge(const std::string &code);
     void removeOutgoingEdges();
 
+    int queueIndex = 0;     // required by MutablePriorityQueue
+
 protected:
     int id;                   // Unique identifier
     std::string location;      // Location name

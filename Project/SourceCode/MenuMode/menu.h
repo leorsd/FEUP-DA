@@ -3,6 +3,7 @@
 
 #include "graph.h"
 #include "algorithms.h"
+#include "displayMenu.h"
 #include <sstream>
 
 Vertex* askSourceId(Graph* graph);
