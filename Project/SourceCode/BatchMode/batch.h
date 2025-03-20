@@ -17,7 +17,7 @@ bool avoidSegments(const std::string& line, Graph* graph);
 
 int getInt(const std::string& line);
 
-bool includeNode(const std::string& line, Graph* graph, Vertex* node);
+bool includeNode(const std::string& line, Graph* graph, Vertex* &node);
 
 void runBatchMode(Graph* graph);
 

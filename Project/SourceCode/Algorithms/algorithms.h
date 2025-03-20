@@ -15,7 +15,7 @@ void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode);
 
 void independentRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, std::list<int>* bestRoute, int* bestRouteTime, std::list<int>* alternativeRoute, int* alternativeRouteTime);
 
-void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode);
+void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode, std::list<int>* restrictedRoute, int* restrictedRouteTime);
 
 void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime);
 
