@@ -80,78 +80,55 @@ void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::l
     for (Vertex *v : graph->getVertexSet()) {
         v->setAvoid(false);
         v->setPath(nullptr);
-        v->setDist(0);
         for (Edge *e : v->getAdj()) {
             e->setAvoid(false);
         }
     }
 }
 
-void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode){
-    int total_time = 0;
-    std::vector<Vertex *> route;
+void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode, std::list<int>* restrictedRoute, int* restrictedRouteTime) {
+    *restrictedRouteTime = 0;
 
     if(includeNode == nullptr){
-      dijkstra(graph, sourceNode, destNode);
-      if(destNode->getDist() == INF){
-          // not found
-          return;
-      }
 
-      std::stack<Vertex *> path;
-      Vertex *current = destNode;
-      while(current && current->getPath()){
-        path.push(current);
-        total_time += current->getPath()->getDrivingTime();
-        current = current->getPath()->getOrig();
-      }
+        dijkstra(graph, sourceNode, destNode);
 
-      path.push(sourceNode);
-      while(!path.empty()){
-        route.push_back(path.top());
-        path.pop();
-      }
+        Vertex *current = destNode;
+        while(current->getPath()){
+            restrictedRoute->push_front(current->getId());
+            *restrictedRouteTime += current->getPath()->getDrivingTime();
+            current = current->getPath()->getOrig();
+        }
 
-
+        restrictedRoute->push_front(sourceNode->getId());
     } else{
 
-      dijkstra(graph, sourceNode, includeNode);
-      if(includeNode->getDist() == INF){
-        // n encontrou o includeNode
-        return;
-      }
+        dijkstra(graph, sourceNode, includeNode);
 
-      std::stack<Vertex *> path1;
-      Vertex *current = includeNode;
-      while(current && current->getPath()){
-        path1.push(current);
-        total_time += current->getPath()->getDrivingTime();
-        current = current->getPath()->getOrig();
-      }
-      path1.push(sourceNode);
+        Vertex *current = includeNode;
+        while(current->getPath()){
+            restrictedRoute->push_front(current->getId());
+            *restrictedRouteTime += current->getPath()->getDrivingTime();
+            current = current->getPath()->getOrig();
+        }
+        restrictedRoute->push_front(sourceNode->getId());
 
-      dijkstra(graph, includeNode, destNode);
-      if(destNode->getDist() == INF){
-        // n encontrou o destNode
-        return;
-      }
-      std::stack<Vertex *> path2;
-      current = destNode;
-      while(current && current->getPath()){
-        path2.push(current);
-        total_time += current->getPath()->getDrivingTime();
-        current = current->getPath()->getOrig();
-      }
+        if (restrictedRoute->size() == 1) {
+          return;
+        }
 
-      while(!path1.empty()){
-        route.push_back(path1.top());
-        path1.pop();
-      }
-      path2.pop(); // evitar que o includedNode apareça duas vezes
-      while(!path2.empty()){
-        route.push_back(path2.top());
-        path2.pop();
-      }
+        dijkstra(graph, includeNode, destNode);
+
+        std::list<int> secondPartOfPath;
+        current = destNode;
+
+        while(current->getPath()){
+            secondPartOfPath.push_front(current->getId());
+            *restrictedRouteTime += current->getPath()->getDrivingTime();
+            current = current->getPath()->getOrig();
+        }
+
+        restrictedRoute->splice(restrictedRoute->end(), secondPartOfPath);
     }
 }
 

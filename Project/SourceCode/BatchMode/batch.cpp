@@ -105,7 +105,10 @@ int getInt(const std::string& line) {
     }
 }
 
-bool includeNode(const std::string& line, Graph* graph, Vertex* node) {
+bool includeNode(const std::string& line, Graph* graph, Vertex* &node) {
+  	if (line.empty()){
+		return true;
+    }
 	try{
 		int id=std::stoi(line);
 		node=graph->findVertex(id);
@@ -208,7 +211,14 @@ void runBatchMode(Graph* graph){
 
     if (mode=="driving" && !maxWalkTimeProvided) {
 		if (incProvided && avoidNodesProvided && avoidSegmentsProvided) {
-        	restrictedRoute(graph, sourceNode, destNode, incNode);
+
+            std::list<int> restrictedRouteList = {};
+            int restrictedRouteTime;
+
+        	restrictedRoute(graph, sourceNode, destNode, incNode, &restrictedRouteList, &restrictedRouteTime);
+
+            displayBatchRestrictedRoute(sourceNode->getId(), destNode->getId(), &restrictedRouteList, restrictedRouteTime);
+
 		}else if(!incProvided && !avoidNodesProvided && !avoidSegmentsProvided){
 
             std::list<int> bestRoute = {};

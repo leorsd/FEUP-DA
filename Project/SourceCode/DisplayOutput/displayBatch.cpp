@@ -41,3 +41,26 @@ void displayBatchIndependentRoute(int source, int dest, std::list<int>* bestRout
 
     std::cout << "\nOutput file successfully created!" << std::endl;
 }
+
+void displayBatchRestrictedRoute(int source, int dest, std::list<int>* restrictedRoute, int restrictedRouteTime){
+    std::ofstream outFile;
+    if ( openFile(outFile) != 0) return;
+
+    std::ostringstream oss;
+    oss << "Source:" << source << std::endl;
+    oss << "Destination:" << dest << std::endl;
+
+    if (restrictedRoute->front() != source || restrictedRoute->back() != dest){
+        oss << "RestrictedDrivingRoute:none" << std::endl;
+    }else{
+        oss << "RestrictedDrivingRoute:" << restrictedRoute->front();
+        for (auto it = std::next(restrictedRoute->begin()); it != restrictedRoute->end(); ++it) {
+            oss << "," << *it;
+        }
+        oss << "(" << restrictedRouteTime << ")" << std::endl;
+    }
+    outFile << oss.str();
+    outFile.close();
+
+    std::cout << "\nOutput file successfully created!" << std::endl;
+}
