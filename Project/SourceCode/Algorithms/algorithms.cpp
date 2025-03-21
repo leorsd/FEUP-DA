@@ -171,9 +171,11 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
     }
 }
 
-void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, std::list<int>* walkingRoute, int* drivingTime, int* walkingTime) {
-    std::vector<std::pair<std::list<int> *, int>> drivingRoutes;
-    std::vector<std::pair<std::list<int> *, int>> walkingRoutes;
+std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, int* drivingTime, std::list<int>* walkingRoute, int* walkingTime) {
+    std::vector<std::pair<std::list<int>, int>> drivingRoutes;
+    std::vector<std::pair<std::list<int>, int>> walkingRoutes;
+
+    std::stringstream ss;
 
     std::set<Vertex *> parkingNodes;
     for ( Vertex *v : graph->getVertexSet()) {
@@ -182,42 +184,80 @@ void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode,
         }
     }
 
+    if (parkingNodes.size() == 0) {
+        ss << "There is no parking node, impossible to find a driving-walking path without it." << std::endl;
+        return ss.str();
+    }
+
     dijkstraDriving(graph, sourceNode, nullptr);
 
     for (Vertex *v : parkingNodes) {
-        std::list<int>* tempDrivingRoute;
+        std::list<int> tempDrivingRoute = {};
         int tempTime = 0;
         while(v->getPath()){
-          tempDrivingRoute->push_front(v->getId());
+          tempDrivingRoute.push_front(v->getId());
           tempTime += v->getPath()->getDrivingTime();
           v = v->getPath()->getOrig();
         }
-        drivingRoutes.push_back({tempDrivingRoute,tempTime});
+        if ( v == sourceNode) {
+            tempDrivingRoute.push_front(v->getId());
+            drivingRoutes.push_back({tempDrivingRoute,tempTime});
+        }
     }
 
-    dijkstraWalking(graph, sourceNode, nullptr);
+    if (drivingRoutes.size() == 0) {
+        ss << "There is no driving path between source node and a parking node with the provided restrictions." << std::endl;
+        return ss.str();
+    }
+
+    dijkstraWalking(graph, destNode, nullptr);
 
     for (Vertex *v : parkingNodes) {
-        std::list<int>* tempWalkingRoute;
+        std::list<int> tempWalkingRoute;
         int tempWalkingTime = 0;
         while(v->getPath()){
-            tempWalkingRoute->push_front(v->getId());
+            tempWalkingRoute.push_back(v->getId());
             tempWalkingTime += v->getPath()->getWalkingTime();
             v = v->getPath()->getOrig();
         }
-        walkingRoutes.push_back({tempWalkingRoute,tempWalkingTime});
+        if ( v == destNode) {
+            tempWalkingRoute.push_back(v->getId());
+            walkingRoutes.push_back({tempWalkingRoute,tempWalkingTime});
+        }
     }
 
+    if (walkingRoutes.size() == 0) {
+        ss << "There is no walking path between a parking node and the destination node with the provided restrictions." << std::endl;
+        return ss.str();
+    }
+
+    bool foundPath = false;
+    bool foundWithMaxTime = false;
+
+    *walkingTime = 1e6;
+    *drivingTime = 1e6;
     for (auto driv : drivingRoutes) {
         for ( auto walk : walkingRoutes) {
-            if (driv.first->back() == walk.first->front() && walk.second <= maxWalkTime){
-                if ((driv.second+walk.second < (*walkingTime + *drivingTime)) || (driv.second+walk.second == (*walkingTime + *drivingTime) && walk.second>*walkingTime)){
-                    *drivingTime = driv.second;
-                    *walkingTime = walk.second;
-                    drivingRoute = driv.first;
-                    walkingRoute = walk.first;
+            if (driv.first.back() == walk.first.front()){
+                foundPath = true;
+                if ( walk.second <= maxWalkTime ){
+                    foundWithMaxTime = true;
+                    if ((driv.second+walk.second < (*walkingTime + *drivingTime)) || (driv.second+walk.second == (*walkingTime + *drivingTime) && walk.second>*walkingTime)){
+                        *drivingTime = driv.second;
+                        *walkingTime = walk.second;
+                        drivingRoute->assign(driv.first.begin(), driv.first.end());
+                        walkingRoute->assign(walk.first.begin(), walk.first.end());
+                    }
                 }
             }
         }
     }
+
+    if (!foundPath){
+        ss << "No possible path between node "<< sourceNode->getId() <<" and "<< destNode->getId() <<" with a driving segment and a walking segment."<< std::endl;
+    }else if (!foundWithMaxTime){
+        ss << "No possible path with maximum walking time of "<< maxWalkTime<< " minutes." << std::endl;
+    }
+
+    return ss.str();
 }

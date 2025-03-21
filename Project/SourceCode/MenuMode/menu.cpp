@@ -29,7 +29,7 @@ Vertex* askSourceId(Graph* graph){
     return sourceNode;
 }
 
-Vertex* askDestId(Graph* graph){
+Vertex* askDestId(Graph* graph, Vertex* sourceNode){
     Vertex* destNode;
     int destId;
 
@@ -48,17 +48,19 @@ Vertex* askDestId(Graph* graph){
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }else{
             destNode = graph->findVertex(destId);
-            if (destNode != nullptr){
-                break;
-            }else{
+            if (destNode == sourceNode){
+                std::cout << "Source node and destination node must be different, please choose other destination node.\n";
+            }else if (destNode == nullptr){
                 std::cout << "Destination node id not found in the loaded graph, please try again.\n";
+            }else{
+                break;
             }
         }
     }
     return destNode;
 }
 
-void askAvoidNodes(Graph* graph){
+void askAvoidNodes(Graph* graph, Vertex* sourceNode, Vertex* destNode){
     std::string line;
 
     std::cout << "\n--- Route Planner Menu ---\n";
@@ -75,7 +77,11 @@ void askAvoidNodes(Graph* graph){
         try {
             int id = std::stoi(word);
             Vertex *vertex = graph->findVertex(id);
-            if (vertex == nullptr){
+            if (vertex == sourceNode){
+                std::cout << "Warning: Cannot avoid the source node, it will not be ignored.\n";
+            }else if (vertex == destNode){
+                std::cout << "Warning: Cannot avoid the destination node, it will not be ignored.\n";
+            }else if (vertex == nullptr){
                 std::cout << "Warning: Not found any node with this id:'" << id << "', it will be ignored.\n";
             }else{
                 vertex->setAvoid(true);
@@ -133,7 +139,7 @@ void askAvoidEdges(Graph* graph){
     }
 }
 
-Vertex* askIncludeNode(Graph* graph){
+Vertex* askIncludeNode(Graph* graph, Vertex* sourceNode, Vertex* destNode){
     Vertex* includeNode = nullptr;
 
     std::cout << "\n--- Route Planner Menu ---\n";
@@ -150,7 +156,9 @@ Vertex* askIncludeNode(Graph* graph){
         try{
             int id = std::stoi(line);
             includeNode = graph->findVertex(id);
-            if (includeNode == nullptr){
+            if (includeNode == sourceNode || includeNode == destNode){
+                std::cout << "Warning: Including the source node or destination node is trivial, please try again.\n";
+            }else if (includeNode == nullptr){
                 std::cout << "Warning: No node found with this id:'" << id << "', it will be ignored, please try again.\n";
             }else{
                 break;
@@ -216,18 +224,19 @@ void runMenuMode(Graph* graph){
             }
         }
     }
+
     Vertex* sourceNode,*destNode, *includeNode;
     int maxWalkTime = 0;
-
     std::list<int> bestRoute = {};
     std::list<int> alternativeRoute = {};
     int bestRouteTime = 0;
     int alternativeRouteTime = 0;
+    std::string message;
 
     switch (alg) {
         case 1:
             sourceNode = askSourceId(graph);
-            destNode = askDestId(graph);
+            destNode = askDestId(graph, sourceNode);
 
             independentRoute(graph, sourceNode, destNode, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
 
@@ -236,10 +245,11 @@ void runMenuMode(Graph* graph){
             break;
         case 2:
             sourceNode = askSourceId(graph);
-            destNode = askDestId(graph);
-            askAvoidNodes(graph);
+            destNode = askDestId(graph, sourceNode);
+
+            askAvoidNodes(graph, sourceNode, destNode);
             askAvoidEdges(graph);
-            includeNode = askIncludeNode(graph);
+            includeNode = askIncludeNode(graph, sourceNode, destNode);
 
             restrictedRoute(graph, sourceNode, destNode, includeNode, &bestRoute, &bestRouteTime);
 
@@ -247,12 +257,17 @@ void runMenuMode(Graph* graph){
 
             break;
         case 3:
+
             sourceNode = askSourceId(graph);
-            destNode = askDestId(graph);
-            askAvoidNodes(graph);
+            destNode = askDestId(graph, sourceNode);
+
+            askAvoidNodes(graph, sourceNode, destNode);
             askAvoidEdges(graph);
             maxWalkTime = askMaxWalkTime(graph);
-            bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime);
+
+            message = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
+
+            displayMenuDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, message);
             break;
         default:
             break;

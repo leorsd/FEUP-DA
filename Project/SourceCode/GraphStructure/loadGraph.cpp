@@ -29,7 +29,7 @@ void loadGraph(const std::string& vertex_filename, const std::string& edge_filen
 
         std::string string_parking;
         std::getline(ss, string_parking,',');
-        parking = (string_parking == "1");
+        parking = (std::stoi(string_parking) == 1);
 
         g->addVertex(location, id, code, parking);
     }

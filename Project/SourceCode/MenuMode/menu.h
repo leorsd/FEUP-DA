@@ -8,13 +8,13 @@
 
 Vertex* askSourceId(Graph* graph);
 
-Vertex* askDestId(Graph* graph);
+Vertex* askDestId(Graph* graph, Vertex* sourceNode);
 
-void askAvoidNodes(Graph* graph);
+void askAvoidNodes(Graph* graph, Vertex* sourceNode, Vertex* destNode);
 
 void askAvoidEdges(Graph* graph);
 
-Vertex* askIncludeNode(Graph* graph);
+Vertex* askIncludeNode(Graph* graph, Vertex* sourceNode, Vertex* destNode);
 
 int askMaxWalkTime(Graph* graph);
 

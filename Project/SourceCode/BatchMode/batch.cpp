@@ -236,7 +236,13 @@ void runBatchMode(Graph* graph){
         }
     }else if (mode=="driving-walking" && !incProvided) {
       	if(maxWalkTimeProvided && avoidNodesProvided && avoidSegmentsProvided) {
-      		bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime);
+
+            std::list<int> drivingRoute = {};
+            std::list<int> walkingRoute = {};
+            int drivingRouteTime;
+            int walkingRouteTime;
+
+            std::string message = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime);
       	}else{
         	std::cout<<"ERROR: Invalid sintax in input.txt, missing some statements."<<std::endl;
         	return;
