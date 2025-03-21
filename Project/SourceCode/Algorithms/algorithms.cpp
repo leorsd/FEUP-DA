@@ -1,6 +1,6 @@
 #include "algorithms.h"
 
-bool relax(Edge *edge) {
+bool relaxDriving(Edge *edge) {
     Vertex *org = edge->getOrig();
     Vertex *dest = edge->getDest();
 
@@ -12,7 +12,19 @@ bool relax(Edge *edge) {
     return false;
 }
 
-void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode) {
+bool relaxWalking(Edge *edge) {
+    Vertex *org = edge->getOrig();
+    Vertex *dest = edge->getDest();
+
+    if (org->getDist() + edge->getWalkingTime() < dest->getDist()) {
+        dest->setDist(org->getDist() + edge->getWalkingTime());
+        dest->setPath(edge);
+        return true;
+    }
+    return false;
+}
+
+void dijkstraDriving(Graph *g, Vertex *sourceNode, Vertex *destNode) {
     auto *pq = new MutablePriorityQueue();
     for (Vertex *v : g->getVertexSet()) {
         if (!v->getAvoid()){
@@ -28,7 +40,7 @@ void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode) {
         Vertex *v = pq->extractMin();
 
         for (Edge *e : v->getAdj()) {
-            if (!e->getAvoid() && !e->getDest()->getAvoid() && relax(e)) {
+            if (!e->getAvoid() && !e->getDest()->getAvoid() && relaxDriving(e)) {
                 pq->decreaseKey(e->getDest());
             }
         }
@@ -40,12 +52,40 @@ void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode) {
     delete pq;
 }
 
+void dijkstraWalking(Graph *g, Vertex *sourceNode, Vertex *destNode) {
+    auto *pq = new MutablePriorityQueue();
+    for (Vertex *v : g->getVertexSet()) {
+        if (!v->getAvoid()){
+            v->setPath(nullptr);
+            v->setDist(INF);
+            pq->insert(v);
+        }
+    }
+    sourceNode->setDist(0);
+    pq->decreaseKey(sourceNode);
+
+    while (!pq->empty()) {
+        Vertex *v = pq->extractMin();
+
+        for (Edge *e : v->getAdj()) {
+            if (!e->getAvoid() && !e->getDest()->getAvoid() && relaxWalking(e)) {
+                pq->decreaseKey(e->getDest());
+            }
+        }
+        if(v == destNode){
+            delete pq;
+            return;
+        }
+    }
+    delete pq;
+}
+
 void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::list<int>* bestRoute, int* bestRouteTime, std::list<int>* alternativeRoute, int* alternativeRouteTime) {
     *bestRouteTime = 0;
     *alternativeRouteTime = 0;
 
 
-    dijkstra(graph, sourceNode, destNode);
+    dijkstraDriving(graph, sourceNode, destNode);
 
     Vertex *current = destNode;
     while (current->getPath()) {
@@ -68,7 +108,7 @@ void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::l
         // Alternarive route
 
 
-    dijkstra(graph, sourceNode, destNode);
+    dijkstraDriving(graph, sourceNode, destNode);
     current = destNode;
     while (current && current->getPath()) {
         alternativeRoute->push_front(current->getId());
@@ -92,7 +132,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
     std::vector<Vertex *> route;
 
     if(includeNode == nullptr){
-      dijkstra(graph, sourceNode, destNode);
+      dijkstraDriving(graph, sourceNode, destNode);
       if(destNode->getDist() == INF){
           // not found
           return;
@@ -115,7 +155,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
 
     } else{
 
-      dijkstra(graph, sourceNode, includeNode);
+      dijkstraDriving(graph, sourceNode, includeNode);
       if(includeNode->getDist() == INF){
         // n encontrou o includeNode
         return;
@@ -130,7 +170,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
       }
       path1.push(sourceNode);
 
-      dijkstra(graph, includeNode, destNode);
+      dijkstraDriving(graph, includeNode, destNode);
       if(destNode->getDist() == INF){
         // n encontrou o destNode
         return;
@@ -155,7 +195,53 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
     }
 }
 
-void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime){
-  //Implement task T3.1
-  std::cout<<"Best Route "<<std::endl;
+void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, std::list<int>* walkingRoute, int* drivingTime, int* walkingTime) {
+    std::vector<std::pair<std::list<int> *, int>> drivingRoutes;
+    std::vector<std::pair<std::list<int> *, int>> walkingRoutes;
+
+    std::set<Vertex *> parkingNodes;
+    for ( Vertex *v : graph->getVertexSet()) {
+        if (v->getParking()){
+          parkingNodes.insert(v);
+        }
+    }
+
+    dijkstraDriving(graph, sourceNode, nullptr);
+
+    for (Vertex *v : parkingNodes) {
+        std::list<int>* tempDrivingRoute;
+        int tempTime = 0;
+        while(v->getPath()){
+          tempDrivingRoute->push_front(v->getId());
+          tempTime += v->getPath()->getDrivingTime();
+          v = v->getPath()->getOrig();
+        }
+        drivingRoutes.push_back({tempDrivingRoute,tempTime});
+    }
+
+    dijkstraWalking(graph, sourceNode, nullptr);
+
+    for (Vertex *v : parkingNodes) {
+        std::list<int>* tempWalkingRoute;
+        int tempWalkingTime = 0;
+        while(v->getPath()){
+            tempWalkingRoute->push_front(v->getId());
+            tempWalkingTime += v->getPath()->getWalkingTime();
+            v = v->getPath()->getOrig();
+        }
+        walkingRoutes.push_back({tempWalkingRoute,tempWalkingTime});
+    }
+
+    for (auto driv : drivingRoutes) {
+        for ( auto walk : walkingRoutes) {
+            if (driv.first->back() == walk.first->front() && walk.second <= maxWalkTime){
+                if ((driv.second+walk.second < (*walkingTime + *drivingTime)) || (driv.second+walk.second == (*walkingTime + *drivingTime) && walk.second>*walkingTime)){
+                    *drivingTime = driv.second;
+                    *walkingTime = walk.second;
+                    drivingRoute = driv.first;
+                    walkingRoute = walk.first;
+                }
+            }
+        }
+    }
 }
