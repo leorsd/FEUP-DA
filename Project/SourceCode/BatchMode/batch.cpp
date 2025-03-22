@@ -5,39 +5,39 @@ bool startsWith(const std::string& line, const std::string& prefix) {
 }
 
 Vertex* getNode(const std::string& line, Graph* graph) {
-  Vertex* node = nullptr;
-  try{
-    int id=std::stoi(line);
-    node=graph->findVertex(id);
-    if(node==nullptr){
-      std::cout<<"ERROR: Vertex with id "<<id<<" not found in graph."<<std::endl;
-      return nullptr;
-    }else{
-      return node;
-    }
-  }catch(...){
-    std::cout<<"ERROR: Invalid input! Incorrect sintax in source or destination line."<<line<<std::endl;
-    return nullptr;
-  }
+	Vertex* node = nullptr;
+	try{
+		int id=std::stoi(line);
+		node=graph->findVertex(id);
+		if(node==nullptr){
+			std::cout<<"ERROR: Vertex with id "<<id<<" not found in graph."<<std::endl;
+			return nullptr;
+		}else{
+			return node;
+		}
+	}catch(...){
+		std::cout<<"ERROR: Invalid input! Incorrect syntax in source or destination line - "<<line<<std::endl;
+		return nullptr;
+	}
 }
 
 bool avoidNodes(const std::string& line, Graph* graph) {
   	std::istringstream iss(line);
     std::string word;
     while (std::getline(iss, word, ',')){
-      try{
-        int id=std::stoi(word);
-        Vertex* node=graph->findVertex(id);
-        if(node==nullptr){
-          std::cout<<"ERROR: Vertex with id "<<id<<" not found in graph."<<std::endl;
-          return false;
-        }else{
-          node->setAvoid(true);
-        }
-      }catch(...){
-        std::cout<<"ERROR: Invalid input! Incorrect sintax in avoid nodes line."<<line<<std::endl;
-        return false;
-      }
+		try{
+			int id=std::stoi(word);
+			Vertex* node=graph->findVertex(id);
+			if(node==nullptr){
+				std::cout<<"ERROR: Vertex with id "<<id<<" not found in graph."<<std::endl;
+				return false;
+			}else{
+				node->setAvoid(true);
+			}
+		}catch(...){
+			std::cout<<"ERROR: Invalid input! Incorrect syntax in avoid nodes line."<<line<<std::endl;
+			return false;
+		}
     }
     return true;
 }
@@ -49,7 +49,7 @@ bool avoidSegments(const std::string& line, Graph* graph) {
 	while (std::getline(iss, word, ')')){
 		if (word.front() == ',') word.erase(0, 1);
 		if (word.front() != '(') {
-	  		std::cout<<"ERROR: Invalid input! Incorrect sintax in avoid segments line."<<std::endl;
+	  		std::cout<<"ERROR: Invalid input! Incorrect syntax in avoid segments line."<<std::endl;
 	        return false;
 		}
 		word.erase(0, 1);
@@ -58,7 +58,7 @@ bool avoidSegments(const std::string& line, Graph* graph) {
 		std::string id1, id2;
 
 		if (!std::getline(ss, id1, ',') || !std::getline(ss, id2, ',')) {
-			std::cout<<"ERROR: Invalid input! Incorrect sintax in avoid segments line."<<std::endl;
+			std::cout<<"ERROR: Invalid input! Incorrect syntax in avoid segments line."<<std::endl;
             return false;
 		}
 
@@ -89,7 +89,7 @@ bool avoidSegments(const std::string& line, Graph* graph) {
                 return false;
 	        }
 		} catch (...) {
-			std::cout<<"ERROR: Invalid input! Incorrect sintax in avoid segments line."<<std::endl;
+			std::cout<<"ERROR: Invalid input! Incorrect syntax in avoid segments line."<<std::endl;
             return false;
 		}
 	}
@@ -100,7 +100,7 @@ int getInt(const std::string& line) {
 	try{
          return std::stoi(line);
 	} catch(...) {
-        std::cout<<"ERROR: Invalid input! Incorrect sintax in max walk time line."<<std::endl;
+        std::cout<<"ERROR: Invalid input! Incorrect syntax in max walk time line."<<std::endl;
         return -1;
     }
 }
@@ -117,7 +117,7 @@ bool includeNode(const std::string& line, Graph* graph, Vertex* &node) {
 			return false;
 		}
 	}catch(...){
-		std::cout<<"ERROR: Invalid input! Incorrect sintax in include node line."<<line<<std::endl;
+		std::cout<<"ERROR: Invalid input! Incorrect syntax in include node line."<<line<<std::endl;
 		return false;
 	}
     return true;
@@ -139,110 +139,168 @@ void runBatchMode(Graph* graph){
     Vertex* incNode = nullptr;
     int maxWalkTime;
 
-    bool modeProvided = false;
-    bool sourceProvided = false;
-    bool destProvided = false;
-    bool incProvided = false;
-    bool avoidNodesProvided = false;
-    bool avoidSegmentsProvided = false;
-    bool maxWalkTimeProvided = false;
+	std::getline(input_file, line);
+	if (startsWith(line, "Mode:")) {
+		mode = line.substr(5);
+	}else{
+		std::cout<<"ERROR: Invalid input! 1st line needs to contain the mode with the defined syntax."<<std::endl;
+        return;
+	}
 
-    while (std::getline(input_file, line)) {
-      	if (startsWith(line, "Mode:")) {
-          	mode = line.substr(5);
-          	if (mode!=("driving") && mode!=("driving-walking")) {
-            	std::cout<<"ERROR: Invalid input! Incorrect sintax in mode line."<<std::endl;
-            	return;
-          	}
-			modeProvided = true;
-      	}
-    	else if (startsWith(line, "Source:")) {
-          	sourceNode = getNode(line.substr(7), graph);
-          	if(sourceNode==nullptr){
-            	return;
-          	}
-            sourceProvided = true;
-      	}
-      	else if (startsWith(line, "Destination:")) {
+	if (mode=="driving") {
+
+		std::getline(input_file, line);
+		if (startsWith(line, "Source:")) {
+			sourceNode = getNode(line.substr(7), graph);
+			if(sourceNode==nullptr){
+				return;
+			}
+		}else {
+			std::cout<<"ERROR: Invalid input! 2nd line needs to contain the source node with the defined syntax."<<std::endl;
+            return;
+		}
+
+        std::getline(input_file, line);
+		if (startsWith(line, "Destination:")) {
 			destNode = getNode(line.substr(12), graph);
-        	if(destNode==nullptr){
-          		return;
-        	}
-            sourceProvided = true;
-      	}
-        else if (startsWith(line, "AvoidNodes:")) {
-			if(!avoidNodes(line.substr(11),graph)){
-                return;
+			if(destNode==nullptr){
+				return;
 			}
-            avoidNodesProvided = true;
-        }
-        else if (startsWith(line, "AvoidSegments:")) {
-			if(!avoidSegments(line.substr(14),graph)){
-                return;
-			}
-            avoidSegmentsProvided = true;
-        }
-        else if (startsWith(line, "IncludeNode:")) {
-			if(!includeNode(line.substr(12),graph,incNode)){
-                return;
-			}
-            incProvided = true;
-        }else if (startsWith(line, "MaxWalkTime:")) {
-          	maxWalkTime = getInt(line.substr(12));
-          	if(maxWalkTime == -1) {
-                return;
-          	}
-            maxWalkTimeProvided = true;
-        }else{
-          	std::cout<<"ERROR: Invalid input! Line not known: "<<line<<std::endl;
-          	return;
-        }
-    }
-    input_file.close();
-
-	if(!sourceNode){
-		std::cout<<"ERROR: Invalid input! Source node not provided."<<std::endl;
-		return;
-	}
-	if(!destNode){
-		std::cout<<"ERROR: Invalid input! Destination node not provided."<<std::endl;
-		return;
-	}
-
-    if (mode=="driving" && !maxWalkTimeProvided) {
-		if (incProvided && avoidNodesProvided && avoidSegmentsProvided) {
-
-            std::list<int> restrictedRouteList = {};
-            int restrictedRouteTime;
-
-        	restrictedRoute(graph, sourceNode, destNode, incNode, &restrictedRouteList, &restrictedRouteTime);
-
-            displayBatchRestrictedRoute(sourceNode->getId(), destNode->getId(), &restrictedRouteList, restrictedRouteTime);
-
-		}else if(!incProvided && !avoidNodesProvided && !avoidSegmentsProvided){
-
-            std::list<int> bestRoute = {};
-            std::list<int> alternativeRoute = {};
-            int bestRouteTime;
-            int alternativeRouteTime;
-
-            independentRoute(graph, sourceNode, destNode, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
-
-			displayBatchIndependentRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime);
-
 		}else{
-            std::cout<<"ERROR: Invalid sintax in input.txt, missing some statements."<<std::endl;
+			std::cout<<"ERROR: Invalid input! 3th line needs to contain the destination node with the defined syntax."<<std::endl;
+			return;
+		}
+
+        std::getline(input_file, line);
+
+        if (input_file.eof()){
+        	std::list<int> bestRoute = {};
+        	std::list<int> alternativeRoute = {};
+        	int bestRouteTime;
+        	int alternativeRouteTime;
+
+        	independentRoute(graph, sourceNode, destNode, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
+
+        	displayBatchIndependentRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime);
             return;
         }
-    }else if (mode=="driving-walking" && !incProvided) {
-      	if(maxWalkTimeProvided && avoidNodesProvided && avoidSegmentsProvided) {
-      		bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime);
-      	}else{
-        	std::cout<<"ERROR: Invalid sintax in input.txt, missing some statements."<<std::endl;
+
+        std::getline(input_file, line);
+		if (startsWith(line, "AvoidNodes:")) {
+			if(!avoidNodes(line.substr(11),graph)){
+				return;
+			}
+		}else{
+			std::cout<<"ERROR: Invalid input! 4th line needs to contain the avoid nodes with the defined syntax."<<std::endl;
+			return;
+		}
+
+        std::getline(input_file, line);
+		if (startsWith(line, "AvoidSegments:")) {
+			if(!avoidSegments(line.substr(14),graph)){
+				return;
+			}
+		}else{
+			std::cout<<"ERROR: Invalid input! 5th line needs to contain the avoid segments with the defined syntax."<<std::endl;
+			return;
+		}
+
+        std::getline(input_file, line);
+		if (startsWith(line, "IncludeNode:")) {
+			if(!includeNode(line.substr(12),graph,incNode)){
+				return;
+			}
+		}else{
+			std::cout<<"ERROR: Invalid input! 6th line needs to contain the include node with the defined syntax."<<std::endl;
+			return;
+		}
+
+        std::getline(input_file, line);
+        if (!input_file.eof()){
+        	std::cout<<"ERROR: Invalid input! There should not be more than 6 lines."<<std::endl;
         	return;
         }
-    }else{
-      	std::cout<<"ERROR: Invalid sintax in input.txt, to much statements provided."<<std::endl;
-    }
+
+		std::list<int> restrictedRouteList = {};
+		int restrictedRouteTime;
+
+		restrictedRoute(graph, sourceNode, destNode, incNode, &restrictedRouteList, &restrictedRouteTime);
+
+		displayBatchRestrictedRoute(sourceNode->getId(), destNode->getId(), &restrictedRouteList, restrictedRouteTime);
+        return;
+
+	}else if (mode=="driving-walking"){
+
+		std::getline(input_file, line);
+		if (startsWith(line, "Source:")) {
+			sourceNode = getNode(line.substr(7), graph);
+			if(sourceNode==nullptr){
+				return;
+			}
+		}else {
+			std::cout<<"ERROR: Invalid input! 2nd line needs to contain the source node with the defined syntax."<<std::endl;
+			return;
+		}
+
+		std::getline(input_file, line);
+		if (startsWith(line, "Destination:")) {
+			destNode = getNode(line.substr(12), graph);
+			if(destNode==nullptr){
+				return;
+			}
+		}else{
+			std::cout<<"ERROR: Invalid input! 3th line needs to contain the destination node with the defined syntax."<<std::endl;
+			return;
+		}
+
+        std::getline(input_file, line);
+		if (startsWith(line, "MaxWalkTime:")) {
+			maxWalkTime = getInt(line.substr(12));
+			if(maxWalkTime == -1) {
+				return;
+			}
+		}else{
+			std::cout<<"ERROR: Invalid input! 4th line needs to contain the maximum walking time with the defined syntax."<<std::endl;
+			return;
+		}
+
+		std::getline(input_file, line);
+		if (startsWith(line, "AvoidNodes:")) {
+			if(!avoidNodes(line.substr(11),graph)){
+				return;
+			}
+		}else{
+			std::cout<<"ERROR: Invalid input! 5th line needs to contain the avoid nodes with the defined syntax."<<std::endl;
+			return;
+		}
+
+		std::getline(input_file, line);
+		if (startsWith(line, "AvoidSegments:")) {
+			if(!avoidSegments(line.substr(14),graph)){
+				return;
+			}
+		}else{
+			std::cout<<"ERROR: Invalid input! 6th line needs to contain the avoid segments with the defined syntax."<<std::endl;
+			return;
+		}
+
+        std::getline(input_file, line);
+        if (!input_file.eof()){
+        	std::cout<<"ERROR: Invalid input! There should not be more than 6 lines."<<std::endl;
+        	return;
+        }
+
+		std::list<int> drivingRoute = {};
+		std::list<int> walkingRoute = {};
+		int drivingRouteTime;
+		int walkingRouteTime;
+
+		std::string message = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime);
+
+		displayBatchDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime, message);
+        return;
+	}else{
+        std::cout<<"ERROR: Invalid input! Unknown mode value."<<std::endl;
+	}
     return;
 }

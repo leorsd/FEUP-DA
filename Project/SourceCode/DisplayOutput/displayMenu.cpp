@@ -54,3 +54,35 @@ void displayMenuRestrictedRoute(int source, int dest, std::list<int>* restricted
     }
     std:: cout << ss.str();
 }
+
+void displayMenuDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, std::string message){
+    std::stringstream ss;
+
+    ss << "\n\n--- Result of Search ---" << std::endl;
+    ss << "Source: " << source << std::endl;
+    ss << "Destination: " << dest << std::endl;
+    ss << std::endl;
+
+    if (message.size() > 0){
+        ss << message;
+        std::cout << ss.str();
+        return;
+    }
+
+    ss << "The best route with the provided restrictions and characteristics of this algorithm is: \n";
+    ss << "Driving: " << drivingRoute->front();
+    for (auto it = std::next(drivingRoute->begin()); it != drivingRoute->end(); ++it) {
+        ss << " -> " << *it;
+    }
+    ss << std::endl;
+    ss << "Parking at: " << walkingRoute->front()<<std::endl;
+
+    ss << "Walking: " << walkingRoute->front();
+    for (auto it = std::next(walkingRoute->begin()); it != walkingRoute->end(); ++it) {
+        ss << " -> " << *it;
+    }
+    ss << std::endl;
+
+    ss << "Estimated driving time of " << drivingTime << " minutes and estimated walking time of "<< walkingTime<<", ending with a total time of " <<(walkingTime + drivingTime) << " minutes." << std::endl;
+    std::cout << ss.str();
+}

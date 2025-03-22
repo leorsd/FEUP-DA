@@ -9,4 +9,6 @@ void displayMenuIndependentRoute(int source, int dest, std::list<int>* bestRoute
 
 void displayMenuRestrictedRoute(int source, int dest, std::list<int>* restrictedRoute, int restrictedRouteTime);
 
+void displayMenuDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, std::string message);
+
 #endif //DISPLAYMENU_H

@@ -1,6 +1,6 @@
 #include "algorithms.h"
 
-bool relax(Edge *edge) {
+bool relaxDriving(Edge *edge) {
     Vertex *org = edge->getOrig();
     Vertex *dest = edge->getDest();
 
@@ -12,7 +12,19 @@ bool relax(Edge *edge) {
     return false;
 }
 
-void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode) {
+bool relaxWalking(Edge *edge) {
+    Vertex *org = edge->getOrig();
+    Vertex *dest = edge->getDest();
+
+    if (org->getDist() + edge->getWalkingTime() < dest->getDist()) {
+        dest->setDist(org->getDist() + edge->getWalkingTime());
+        dest->setPath(edge);
+        return true;
+    }
+    return false;
+}
+
+void dijkstraDriving(Graph *g, Vertex *sourceNode, Vertex *destNode) {
     auto *pq = new MutablePriorityQueue();
     for (Vertex *v : g->getVertexSet()) {
         if (!v->getAvoid()){
@@ -28,7 +40,7 @@ void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode) {
         Vertex *v = pq->extractMin();
 
         for (Edge *e : v->getAdj()) {
-            if (!e->getAvoid() && !e->getDest()->getAvoid() && relax(e)) {
+            if (!e->getAvoid() && !e->getDest()->getAvoid() && relaxDriving(e)) {
                 pq->decreaseKey(e->getDest());
             }
         }
@@ -40,12 +52,40 @@ void dijkstra(Graph *g, Vertex *sourceNode, Vertex *destNode) {
     delete pq;
 }
 
+void dijkstraWalking(Graph *g, Vertex *sourceNode, Vertex *destNode) {
+    auto *pq = new MutablePriorityQueue();
+    for (Vertex *v : g->getVertexSet()) {
+        if (!v->getAvoid()){
+            v->setPath(nullptr);
+            v->setDist(INF);
+            pq->insert(v);
+        }
+    }
+    sourceNode->setDist(0);
+    pq->decreaseKey(sourceNode);
+
+    while (!pq->empty()) {
+        Vertex *v = pq->extractMin();
+
+        for (Edge *e : v->getAdj()) {
+            if (!e->getAvoid() && !e->getDest()->getAvoid() && relaxWalking(e)) {
+                pq->decreaseKey(e->getDest());
+            }
+        }
+        if(v == destNode){
+            delete pq;
+            return;
+        }
+    }
+    delete pq;
+}
+
 void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::list<int>* bestRoute, int* bestRouteTime, std::list<int>* alternativeRoute, int* alternativeRouteTime) {
     *bestRouteTime = 0;
     *alternativeRouteTime = 0;
 
 
-    dijkstra(graph, sourceNode, destNode);
+    dijkstraDriving(graph, sourceNode, destNode);
 
     Vertex *current = destNode;
     while (current->getPath()) {
@@ -68,7 +108,7 @@ void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::l
         // Alternarive route
 
 
-    dijkstra(graph, sourceNode, destNode);
+    dijkstraDriving(graph, sourceNode, destNode);
     current = destNode;
     while (current && current->getPath()) {
         alternativeRoute->push_front(current->getId());
@@ -90,8 +130,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
     *restrictedRouteTime = 0;
 
     if(includeNode == nullptr){
-
-        dijkstra(graph, sourceNode, destNode);
+        dijkstraDriving(graph, sourceNode, destNode);
 
         Vertex *current = destNode;
         while(current->getPath()){
@@ -103,7 +142,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
         restrictedRoute->push_front(sourceNode->getId());
     } else{
 
-        dijkstra(graph, sourceNode, includeNode);
+        dijkstraDriving(graph, sourceNode, includeNode);
 
         Vertex *current = includeNode;
         while(current->getPath()){
@@ -117,7 +156,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
           return;
         }
 
-        dijkstra(graph, includeNode, destNode);
+        dijkstraDriving(graph, includeNode, destNode);
 
         std::list<int> secondPartOfPath;
         current = destNode;
@@ -132,7 +171,93 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
     }
 }
 
-void bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime){
-  //Implement task T3.1
-  std::cout<<"Best Route "<<std::endl;
+std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, int* drivingTime, std::list<int>* walkingRoute, int* walkingTime) {
+    std::vector<std::pair<std::list<int>, int>> drivingRoutes;
+    std::vector<std::pair<std::list<int>, int>> walkingRoutes;
+
+    std::stringstream ss;
+
+    std::set<Vertex *> parkingNodes;
+    for ( Vertex *v : graph->getVertexSet()) {
+        if (v->getParking()){
+          parkingNodes.insert(v);
+        }
+    }
+
+    if (parkingNodes.size() == 0) {
+        ss << "There is no parking node, impossible to find a driving-walking path without it." << std::endl;
+        return ss.str();
+    }
+
+    dijkstraDriving(graph, sourceNode, nullptr);
+
+    for (Vertex *v : parkingNodes) {
+        std::list<int> tempDrivingRoute = {};
+        int tempTime = 0;
+        while(v->getPath()){
+          tempDrivingRoute.push_front(v->getId());
+          tempTime += v->getPath()->getDrivingTime();
+          v = v->getPath()->getOrig();
+        }
+        if ( v == sourceNode) {
+            tempDrivingRoute.push_front(v->getId());
+            drivingRoutes.push_back({tempDrivingRoute,tempTime});
+        }
+    }
+
+    if (drivingRoutes.size() == 0) {
+        ss << "There is no driving path between source node and a parking node with the provided restrictions." << std::endl;
+        return ss.str();
+    }
+
+    dijkstraWalking(graph, destNode, nullptr);
+
+    for (Vertex *v : parkingNodes) {
+        std::list<int> tempWalkingRoute;
+        int tempWalkingTime = 0;
+        while(v->getPath()){
+            tempWalkingRoute.push_back(v->getId());
+            tempWalkingTime += v->getPath()->getWalkingTime();
+            v = v->getPath()->getOrig();
+        }
+        if ( v == destNode) {
+            tempWalkingRoute.push_back(v->getId());
+            walkingRoutes.push_back({tempWalkingRoute,tempWalkingTime});
+        }
+    }
+
+    if (walkingRoutes.size() == 0) {
+        ss << "There is no walking path between a parking node and the destination node with the provided restrictions." << std::endl;
+        return ss.str();
+    }
+
+    bool foundPath = false;
+    bool foundWithMaxTime = false;
+
+    *walkingTime = 1e6;
+    *drivingTime = 1e6;
+    for (auto driv : drivingRoutes) {
+        for ( auto walk : walkingRoutes) {
+            if (driv.first.back() == walk.first.front()){
+                foundPath = true;
+                if ( walk.second <= maxWalkTime ){
+                    foundWithMaxTime = true;
+                    if ((driv.second+walk.second < (*walkingTime + *drivingTime)) || (driv.second+walk.second == (*walkingTime + *drivingTime) && walk.second>*walkingTime)){
+                        *drivingTime = driv.second;
+                        *walkingTime = walk.second;
+                        drivingRoute->assign(driv.first.begin(), driv.first.end());
+                        walkingRoute->assign(walk.first.begin(), walk.first.end());
+                    }
+                }
+            }
+        }
+    }
+
+    if (!foundPath){
+        ss << "No possible path between node "<< sourceNode->getId() <<" and "<< destNode->getId() <<" with a driving segment and a walking segment."<< std::endl;
+    }else if (!foundWithMaxTime){
+        ss << "No possible path with maximum walking time of "<< maxWalkTime<< " minutes." << std::endl;
+    }
+
+    return ss.str();
 }

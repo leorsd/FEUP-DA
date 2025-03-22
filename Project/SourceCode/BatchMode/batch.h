@@ -1,11 +1,12 @@
-#ifndef BATCHREADER_H
-#define BATCHREADER_H
+#ifndef BATCH_H
+#define BATCH_H
 
 #include "graph.h"
 #include "algorithms.h"
 #include "displayBatch.h"
 #include <sstream>
 #include <fstream>
+#include <string>
 
 bool startsWith(const std::string& line, const std::string& prefix);
 
@@ -21,4 +22,4 @@ bool includeNode(const std::string& line, Graph* graph, Vertex* &node);
 
 void runBatchMode(Graph* graph);
 
-#endif //BATCHREADER_H
+#endif //BATCH_H

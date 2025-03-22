@@ -64,3 +64,41 @@ void displayBatchRestrictedRoute(int source, int dest, std::list<int>* restricte
 
     std::cout << "\nOutput file successfully created!" << std::endl;
 }
+
+void displayBatchDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, std::string message){
+    std::ofstream outFile;
+    if ( openFile(outFile) != 0) return;
+
+    std::ostringstream oss;
+    oss << "Source:" << source << std::endl;
+    oss << "Destination:" << dest << std::endl;
+
+    if (message.size() == 0){
+
+        oss << "DrivingRoute:" << drivingRoute->front();
+        for (auto it = std::next(drivingRoute->begin()); it != drivingRoute->end(); ++it) {
+            oss << "," << *it;
+        }
+        oss << "(" << drivingTime << ")" << std::endl;
+
+        oss << "ParkingNode:" << walkingRoute->front() << std::endl;
+
+        oss << "WalkingRoute:" << walkingRoute->front();
+        for (auto it = std::next(walkingRoute->begin()); it != walkingRoute->end(); ++it) {
+            oss << "," << *it;
+        }
+        oss << "(" << walkingTime << ")" << std::endl;
+
+        oss << "TotalTime:" <<(walkingTime+drivingTime) <<std::endl;
+    }else{
+        oss << "DrivingRoute:none\n";
+        oss << "ParkingNode:none\n";
+        oss << "WalkingRoute:none\n";
+        oss << "TotalTime:\n";
+        oss << message;
+    }
+    outFile << oss.str();
+    outFile.close();
+
+    std::cout << "\nOutput file successfully created!" << std::endl;
+}

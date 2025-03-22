@@ -14,4 +14,6 @@ void displayBatchIndependentRoute(int source, int dest, std::list<int>* bestRout
 
 void displayBatchRestrictedRoute(int source, int dest, std::list<int>* restrictedRoute, int restrictedRouteTime);
 
+void displayBatchDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, std::string message);
+
 #endif //DISPLAYBATCH_H
