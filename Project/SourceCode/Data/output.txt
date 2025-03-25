@@ -1,4 +1,20 @@
-Source:5
-Destination:8
-BestDrivingRoute:5,3,2,4,8(31)
-AlternativeDrivingRoute:none
+Source:8
+Destination:5
+DrivingRoute:none
+ParkingNode:none
+WalkingRoute:none
+TotalTime:
+Message:No possible path with the max. walking time provided.
+
+--- Approximate Route ---
+
+Source:8
+Destination:5
+DrivingRoute1:8,4,2,3(19)
+ParkingNode1:3
+WalkingRoute1:3,5(10)
+TotalTime1:29
+DrivingRoute2:8,4,6(21)
+ParkingNode2:6
+WalkingRoute2:6,5(10)
+TotalTime2:31

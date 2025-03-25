@@ -171,11 +171,9 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
     }
 }
 
-std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, int* drivingTime, std::list<int>* walkingRoute, int* walkingTime) {
+RouteResult bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, int* drivingTime, std::list<int>* walkingRoute, int* walkingTime) {
     std::vector<std::pair<std::list<int>, int>> drivingRoutes;
     std::vector<std::pair<std::list<int>, int>> walkingRoutes;
-
-    std::stringstream ss;
 
     std::set<Vertex *> parkingNodes;
     for ( Vertex *v : graph->getVertexSet()) {
@@ -185,8 +183,7 @@ std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
     }
 
     if (parkingNodes.size() == 0) {
-        ss << "There is no parking node, impossible to find a driving-walking path without it." << std::endl;
-        return ss.str();
+        return NO_PARKING_AVAILABLE;
     }
 
     dijkstraDriving(graph, sourceNode, nullptr);
@@ -201,13 +198,14 @@ std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
         }
         if ( v == sourceNode) {
             tempDrivingRoute.push_front(v->getId());
-            drivingRoutes.push_back({tempDrivingRoute,tempTime});
+            if (tempDrivingRoute.size() > 1) {
+              drivingRoutes.push_back({tempDrivingRoute,tempTime});
+            }
         }
     }
 
     if (drivingRoutes.size() == 0) {
-        ss << "There is no driving path between source node and a parking node with the provided restrictions." << std::endl;
-        return ss.str();
+        return INVALID_ROUTE;
     }
 
     dijkstraWalking(graph, destNode, nullptr);
@@ -222,13 +220,14 @@ std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
         }
         if ( v == destNode) {
             tempWalkingRoute.push_back(v->getId());
-            walkingRoutes.push_back({tempWalkingRoute,tempWalkingTime});
+            if (tempWalkingRoute.size() > 1) {
+              walkingRoutes.push_back({tempWalkingRoute,tempWalkingTime});
+            }
         }
     }
 
     if (walkingRoutes.size() == 0) {
-        ss << "There is no walking path between a parking node and the destination node with the provided restrictions." << std::endl;
-        return ss.str();
+        return INVALID_ROUTE;
     }
 
     bool foundPath = false;
@@ -254,10 +253,86 @@ std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
     }
 
     if (!foundPath){
-        ss << "No possible path between node "<< sourceNode->getId() <<" and "<< destNode->getId() <<" with a driving segment and a walking segment."<< std::endl;
+        return INVALID_ROUTE;
     }else if (!foundWithMaxTime){
-        ss << "No possible path with maximum walking time of "<< maxWalkTime<< " minutes." << std::endl;
+        return WALKING_TIME_EXCEEDED;
     }
 
-    return ss.str();
+    return VALID_ROUTE;
+}
+
+void aproximateSolution(Graph* graph, Vertex* sourceNode, Vertex* destNode, std::list<int>* drivingRoute1, int* drivingTime1, std::list<int>* walkingRoute1, int* walkingTime1, std::list<int>* drivingRoute2, int* drivingTime2, std::list<int>* walkingRoute2, int* walkingTime2) {
+    std::vector<std::pair<std::list<int>, int>> drivingRoutes;
+    std::vector<std::pair<std::list<int>, int>> walkingRoutes;
+
+    std::set<Vertex *> parkingNodes;
+    for ( Vertex *v : graph->getVertexSet()) {
+        if (v->getParking()){
+          parkingNodes.insert(v);
+        }
+    }
+
+    dijkstraDriving(graph, sourceNode, nullptr);
+
+    for (Vertex *v : parkingNodes) {
+        std::list<int> tempDrivingRoute = {};
+        int tempTime = 0;
+        while(v->getPath()){
+          tempDrivingRoute.push_front(v->getId());
+          tempTime += v->getPath()->getDrivingTime();
+          v = v->getPath()->getOrig();
+        }
+        if ( v == sourceNode) {
+            tempDrivingRoute.push_front(v->getId());
+            if (tempDrivingRoute.size() > 1) {
+              drivingRoutes.push_back({tempDrivingRoute,tempTime});
+            }
+        }
+    }
+
+    dijkstraWalking(graph, destNode, nullptr);
+
+    for (Vertex *v : parkingNodes) {
+        std::list<int> tempWalkingRoute;
+        int tempWalkingTime = 0;
+        while(v->getPath()){
+            tempWalkingRoute.push_back(v->getId());
+            tempWalkingTime += v->getPath()->getWalkingTime();
+            v = v->getPath()->getOrig();
+        }
+        if ( v == destNode) {
+            tempWalkingRoute.push_back(v->getId());
+            if (tempWalkingRoute.size() > 1) {
+              walkingRoutes.push_back({tempWalkingRoute,tempWalkingTime});
+            }
+        }
+    }
+
+    *walkingTime1 = 1e6;
+    *drivingTime1 = 1e6;
+    *walkingTime2 = 1e6;
+    *drivingTime2 = 1e6;
+    for (auto driv : drivingRoutes) {
+        for ( auto walk : walkingRoutes) {
+            if (driv.first.back() == walk.first.front()){
+                if ((driv.second+walk.second < (*walkingTime1 + *drivingTime1)) || (driv.second+walk.second == (*walkingTime1 + *drivingTime1) && walk.second>*walkingTime1)){
+                    *drivingTime2 = *drivingTime1;
+                    *walkingTime2 = *walkingTime1;
+                    drivingRoute2->assign(drivingRoute1->begin(), drivingRoute1->end());
+                    walkingRoute2->assign(walkingRoute1->begin(), walkingRoute1->end());
+
+                    *drivingTime1 = driv.second;
+                    *walkingTime1 = walk.second;
+                    drivingRoute1->assign(driv.first.begin(), driv.first.end());
+                    walkingRoute1->assign(walk.first.begin(), walk.first.end());
+                }else if((driv.second+walk.second < (*walkingTime2 + *drivingTime2)) || (driv.second+walk.second == (*walkingTime2 + *drivingTime2) && walk.second>*walkingTime2)){
+                    *drivingTime2 = driv.second;
+                    *walkingTime2 = walk.second;
+                    drivingRoute2->assign(driv.first.begin(), driv.first.end());
+                    walkingRoute2->assign(walk.first.begin(), walk.first.end());
+                }
+            }
+        }
+    }
+    return;
 }

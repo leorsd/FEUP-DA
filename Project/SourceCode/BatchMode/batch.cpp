@@ -183,17 +183,16 @@ void runBatchMode(Graph* graph){
 
         	displayBatchIndependentRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime);
             return;
+        }else{
+        	if (startsWith(line, "AvoidNodes:")) {
+        		if(!avoidNodes(line.substr(11),graph)){
+        			return;
+        		}
+        	}else{
+        		std::cout<<"ERROR: Invalid input! 4th line needs to contain the avoid nodes with the defined syntax."<<std::endl;
+        		return;
+        	}
         }
-
-        std::getline(input_file, line);
-		if (startsWith(line, "AvoidNodes:")) {
-			if(!avoidNodes(line.substr(11),graph)){
-				return;
-			}
-		}else{
-			std::cout<<"ERROR: Invalid input! 4th line needs to contain the avoid nodes with the defined syntax."<<std::endl;
-			return;
-		}
 
         std::getline(input_file, line);
 		if (startsWith(line, "AvoidSegments:")) {
@@ -295,9 +294,16 @@ void runBatchMode(Graph* graph){
 		int drivingRouteTime;
 		int walkingRouteTime;
 
-		std::string message = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime);
-
-		displayBatchDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime, message);
+		RouteResult result = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime);
+		displayBatchDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime, result);
+        if ( result == WALKING_TIME_EXCEEDED){
+            std::list<int> drivingRoute2 = {};
+            std::list<int> walkingRoute2 = {};
+            int drivingRouteTime2;
+            int walkingRouteTime2;
+        	aproximateSolution(graph, sourceNode, destNode, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime, &drivingRoute2, &drivingRouteTime2, &walkingRoute2, &walkingRouteTime2);
+			displayBatchAproximateRoute(sourceNode->getId(), destNode->getId(), &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime, &drivingRoute2, drivingRouteTime2, &walkingRoute2, walkingRouteTime2);
+        }
         return;
 	}else{
         std::cout<<"ERROR: Invalid input! Unknown mode value."<<std::endl;

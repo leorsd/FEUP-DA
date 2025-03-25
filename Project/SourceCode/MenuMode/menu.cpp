@@ -195,6 +195,30 @@ int askMaxWalkTime(Graph* graph){
     return maxWalkTime;
 }
 
+bool askForAproximateSolution(){
+    std::cout << "\nDo you want a aproximate solution? 1 for yes, 0 for no\n";
+    int choice;
+    while(true){
+
+        std::cout << "Your choice: ";
+        std::cin >> choice;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        if (std::cin.fail()) {
+            std::cout << "Invalid input! You entered a non-integer value, please try again.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }else if (choice != 1 && choice != 0){
+            std::cout << "Invalid input! Please enter 0 or 1.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }else{
+            break;
+        }
+    }
+    return (choice == 1);
+}
+
 void runMenuMode(Graph* graph){
     int alg;
 
@@ -231,7 +255,12 @@ void runMenuMode(Graph* graph){
     std::list<int> alternativeRoute = {};
     int bestRouteTime = 0;
     int alternativeRouteTime = 0;
-    std::string message;
+    std::list<int> drivingRoute;
+    std::list<int> walkingRoute;
+    int walkingRouteTime = 0;
+    int drivingRouteTime = 0;
+
+    RouteResult result;
 
     switch (alg) {
         case 1:
@@ -265,9 +294,15 @@ void runMenuMode(Graph* graph){
             askAvoidEdges(graph);
             maxWalkTime = askMaxWalkTime(graph);
 
-            message = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
+            result = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
+            displayMenuDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, result);
 
-            displayMenuDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, message);
+            if (result == WALKING_TIME_EXCEEDED){
+                if (askForAproximateSolution()){
+                    aproximateSolution(graph, sourceNode, destNode,&bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime );
+                    displayMenuAproximateRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime);
+                }
+            }
             break;
         default:
             break;

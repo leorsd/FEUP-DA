@@ -10,6 +10,13 @@
 #include "graph.h"
 #include "mutablePriorityQueue.h"
 
+enum RouteResult {
+    NO_PARKING_AVAILABLE,
+    WALKING_TIME_EXCEEDED,
+    INVALID_ROUTE,
+    VALID_ROUTE,
+};
+
 bool relaxDriving(Edge *edge);
 
 bool relaxWalking(Edge *edge);
@@ -22,6 +29,8 @@ void independentRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, std::l
 
 void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode, std::list<int>* restrictedRoute, int* restrictedRouteTime);
 
-std::string bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, int* drivingTime, std::list<int>* walkingRoute, int* walkingTime);
+RouteResult bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* destNode, int maxWalkTime, std::list<int>* drivingRoute, int* drivingTime, std::list<int>* walkingRoute, int* walkingTime);
+
+void aproximateSolution(Graph* graph, Vertex* sourceNode, Vertex* destNode, std::list<int>* drivingRoute1, int* drivingTime1, std::list<int>* walkingRoute1, int* walkingTime1, std::list<int>* drivingRoute2, int* drivingTime2, std::list<int>* walkingRoute2, int* walkingTime2);
 
 #endif //ALGORITHMS_H

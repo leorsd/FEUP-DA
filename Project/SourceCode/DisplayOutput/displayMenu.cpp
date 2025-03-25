@@ -55,7 +55,7 @@ void displayMenuRestrictedRoute(int source, int dest, std::list<int>* restricted
     std:: cout << ss.str();
 }
 
-void displayMenuDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, std::string message){
+void displayMenuDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, RouteResult result){
     std::stringstream ss;
 
     ss << "\n\n--- Result of Search ---" << std::endl;
@@ -63,10 +63,21 @@ void displayMenuDrivingWalkingRoute(int source, int dest, std::list<int>* drivin
     ss << "Destination: " << dest << std::endl;
     ss << std::endl;
 
-    if (message.size() > 0){
-        ss << message;
-        std::cout << ss.str();
-        return;
+    switch (result){
+        case WALKING_TIME_EXCEEDED:
+            ss << "No possible path with the maximum walk time provided." << std::endl;
+            std::cout << ss.str();
+            return;
+        case INVALID_ROUTE:
+            ss << "No possible path with the restrictions provided." << std::endl;
+            std::cout << ss.str();
+            return;
+        case NO_PARKING_AVAILABLE:
+            ss << "No parking nodes available, impossible to find the desired path." << std::endl;
+            std::cout << ss.str();
+            return;
+        default:
+            break;
     }
 
     ss << "The best route with the provided restrictions and characteristics of this algorithm is: \n";
@@ -84,5 +95,48 @@ void displayMenuDrivingWalkingRoute(int source, int dest, std::list<int>* drivin
     ss << std::endl;
 
     ss << "Estimated driving time of " << drivingTime << " minutes and estimated walking time of "<< walkingTime<<", ending with a total time of " <<(walkingTime + drivingTime) << " minutes." << std::endl;
+    std::cout << ss.str();
+}
+
+void displayMenuAproximateRoute(int source, int dest, std::list<int>* drivingRoute1, int drivingTime1, std::list<int>* walkingRoute1, int walkingTime1, std::list<int>* drivingRoute2, int drivingTime2, std::list<int>* walkingRoute2, int walkingTime2){
+    std::stringstream ss;
+
+    ss << "\n\n--- Result of Search ---" << std::endl;
+    ss << "Source: " << source << std::endl;
+    ss << "Destination: " << dest << std::endl;
+    ss << std::endl;
+    ss << "The max walk time for the aproximate solutions is "<< walkingTime2 << " minutes." << std::endl;
+    ss << std::endl;
+    ss << "The best aproximate solutions is: \n";
+    ss << "Driving: " << drivingRoute1->front();
+    for (auto it = std::next(drivingRoute1->begin()); it != drivingRoute1->end(); ++it) {
+        ss << " -> " << *it;
+    }
+    ss << std::endl;
+    ss << "Parking at: " << walkingRoute1->front()<<std::endl;
+
+    ss << "Walking: " << walkingRoute1->front();
+    for (auto it = std::next(walkingRoute1->begin()); it != walkingRoute1->end(); ++it) {
+        ss << " -> " << *it;
+    }
+    ss << std::endl;
+
+    ss << "Estimated driving time of " << drivingTime1 << " minutes and estimated walking time of "<< walkingTime1<<", ending with a total time of " <<(walkingTime1 + drivingTime1) << " minutes." << std::endl;
+
+    ss << "The second best aproximate solutions is: \n";
+    ss << "Driving: " << drivingRoute2->front();
+    for (auto it = std::next(drivingRoute2->begin()); it != drivingRoute2->end(); ++it) {
+        ss << " -> " << *it;
+    }
+    ss << std::endl;
+    ss << "Parking at: " << walkingRoute2->front()<<std::endl;
+
+    ss << "Walking: " << walkingRoute2->front();
+    for (auto it = std::next(walkingRoute2->begin()); it != walkingRoute2->end(); ++it) {
+        ss << " -> " << *it;
+    }
+    ss << std::endl;
+
+    ss << "Estimated driving time of " << drivingTime2 << " minutes and estimated walking time of "<< walkingTime2<<", ending with a total time of " <<(walkingTime2 + drivingTime2) << " minutes." << std::endl;
     std::cout << ss.str();
 }
