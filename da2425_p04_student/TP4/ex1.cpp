@@ -1,10 +1,72 @@
+#include <climits>
+
 #include "exercises.h"
 #include "cmath"
 
+int maxCrossingSum(int A[], int left, int mid, int right, int &crossStart, int &crossEnd) {
+    int leftSum = INT_MIN, rightSum = INT_MIN;
+    int sum = 0, tempStart = mid;
 
+    // Left part
+    for (int i = mid; i >= left; i--) {
+        sum += A[i];
+        if (sum > leftSum) {
+            leftSum = sum;
+            tempStart = i;
+        }
+    }
+
+    sum = 0;
+    int tempEnd = mid + 1;
+    // Right part
+    for (int i = mid + 1; i <= right; i++) {
+        sum += A[i];
+        if (sum > rightSum) {
+            rightSum = sum;
+            tempEnd = i;
+        }
+    }
+
+    crossStart = tempStart;
+    crossEnd = tempEnd;
+    return leftSum + rightSum;
+}
+
+// Divide and conquer approach to find max subarray
+int maxSubsequenceRecurence(int A[], int left, int right, int &start, int &end) {
+    if (left == right) {
+        start = end = left;
+        return A[left];
+    }
+
+    int mid = left + (right - left) / 2;
+    int leftStart, leftEnd;
+    int rightStart, rightEnd;
+    int crossStart, crossEnd;
+
+    int leftMax = maxSubsequenceRecurence(A, left, mid, leftStart, leftEnd);
+    int rightMax = maxSubsequenceRecurence(A, mid + 1, right, rightStart, rightEnd);
+
+    int crossMax = maxCrossingSum(A, left, mid, right, crossStart, crossEnd);
+
+    if (leftMax >= rightMax && leftMax >= crossMax) {
+        start = leftStart;
+        end = leftEnd;
+        return leftMax;
+    }else if (rightMax >= leftMax && rightMax >= crossMax) {
+        start = rightStart;
+        end = rightEnd;
+        return rightMax;
+    }else {
+        start = crossStart;
+        end = crossEnd;
+        return crossMax;
+    }
+}
+
+// Main function to call the divide and conquer approach
 int maxSubsequenceDC(int A[], unsigned int n, int &i, int &j) {
-
-    return 0;
+    return maxSubsequenceRecurence(A, 0, n - 1, i, j);
 }
 
 /// TESTS ///
