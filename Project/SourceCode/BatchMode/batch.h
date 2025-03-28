@@ -9,6 +9,12 @@
 #include <string>
 
 /**
+ * @file This file contains the function declarations for the batch mode of the program.
+ * The batch mode is used to read input from a file and process it to call the desired algorithms on the graph.
+ * The functions are implemented in the batch.cpp file.
+ */
+
+/**
  * @brief Function to check if a string starts with a given prefix.
  * @param line The string to check.
  * @param prefix The prefix to check for.

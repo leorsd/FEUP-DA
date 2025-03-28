@@ -5,6 +5,11 @@
 #include <vector>
 #include <limits>
 
+/**
+ * @file This file contains the definition of the graph structure used in the algorithms and its components.
+ * The implementation of the graph structure is done in the graph.cpp file.
+ */
+
 #define INF std::numeric_limits<double>::max()
 
 class Edge;

@@ -7,6 +7,12 @@
 #include <sstream>
 
 /**
+ * @file This file contains the function declarations for the menu mode of the program.
+ * The menu mode is used to interact with the user and ask for the parameters needed to run the algorithms.
+ * The functions are implemented in the menu.cpp file.
+ */
+
+/**
  * @brief Asks the user for the source node id.
  * 
  * @details The function prompts the user to enter the source node id. It validates the input and checks if the node exists in the graph. If the input is invalid or the node does not exist, it will ask again until a valid source node id is provided.

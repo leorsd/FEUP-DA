@@ -7,6 +7,12 @@
 #include "algorithms.h"
 
 /**
+ * @file This file contains the function declarations for displaying the output in menu mode.
+ * The functions are used to display the results of the algorithms in a user-friendly format.
+ * The functions are implemented in the displayMenu.cpp file.
+ */
+
+/**
  * @brief Displays the output for the independent route algorithm in the menu mode.ADJ_OFFSET_SINGLESHOT
  * 
  * @details The function displays the best route and its time, as well as an alternative route and its time. The display is done in a user-friendly format, showing the source and destination nodes, the best route, and the alternative route. The function also handles the case where no alternative route is found.
