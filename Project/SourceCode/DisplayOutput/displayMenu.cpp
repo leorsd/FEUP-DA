@@ -76,6 +76,14 @@ void displayMenuDrivingWalkingRoute(int source, int dest, std::list<int>* drivin
             ss << "No parking nodes available, impossible to find the desired path." << std::endl;
             std::cout << ss.str();
             return;
+        case NO_WALKING_AVAILABLE:
+            ss << "No walking path can be found from any parking node to the destination node.." << std::endl;
+            std::cout << ss.str();
+            return;
+        case NO_DRIVING_AVAILABLE:
+            ss << "No driving path can be found from the source node to any parking node." << std::endl;
+            std::cout << ss.str();
+            return;
         default:
             break;
     }

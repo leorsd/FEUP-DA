@@ -21,7 +21,7 @@ Vertex* getNode(const std::string& line, Graph* graph) {
 	}
 }
 
-bool avoidNodes(const std::string& line, Graph* graph) {
+bool avoidNodes(const std::string& line, Graph* graph, Vertex* source, Vertex* destination) {
   	std::istringstream iss(line);
     std::string word;
     while (std::getline(iss, word, ',')){
@@ -31,8 +31,11 @@ bool avoidNodes(const std::string& line, Graph* graph) {
 			if(node==nullptr){
 				std::cout<<"ERROR: Vertex with id "<<id<<" not found in graph."<<std::endl;
 				return false;
+			}else if( node==source || node==destination){
+                std::cout<<"ERROR: Cannot avoid the source or the destination node."<<std::endl;
+                return false;
 			}else{
-				node->setAvoid(true);
+                node->setAvoid(true);
 			}
 		}catch(...){
 			std::cout<<"ERROR: Invalid input! Incorrect syntax in avoid nodes line."<<line<<std::endl;
@@ -185,7 +188,7 @@ void runBatchMode(Graph* graph){
             return;
         }else{
         	if (startsWith(line, "AvoidNodes:")) {
-        		if(!avoidNodes(line.substr(11),graph)){
+        		if(!avoidNodes(line.substr(11),graph, sourceNode, destNode)){
         			return;
         		}
         	}else{
@@ -265,7 +268,7 @@ void runBatchMode(Graph* graph){
 
 		std::getline(input_file, line);
 		if (startsWith(line, "AvoidNodes:")) {
-			if(!avoidNodes(line.substr(11),graph)){
+			if(!avoidNodes(line.substr(11),graph, sourceNode, destNode)){
 				return;
 			}
 		}else{

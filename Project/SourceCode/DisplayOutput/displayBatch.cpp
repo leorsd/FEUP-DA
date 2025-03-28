@@ -108,6 +108,11 @@ void displayBatchDrivingWalkingRoute(int source, int dest, std::list<int>* drivi
             case NO_PARKING_AVAILABLE:
                 oss << "No parking nodes available, impossible to find the desired path." << std::endl;
                 break;
+            case NO_WALKING_AVAILABLE:
+                oss << "No walking path can be found from any parking node to the destination node" << std::endl;
+                break;
+            case NO_DRIVING_AVAILABLE:
+                oss << "No driving path can be found from source node to any parking node" << std::endl;
             default:
                 break;
         }

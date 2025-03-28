@@ -205,7 +205,7 @@ RouteResult bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
     }
 
     if (drivingRoutes.size() == 0) {
-        return INVALID_ROUTE;
+        return NO_DRIVING_AVAILABLE;
     }
 
     dijkstraWalking(graph, destNode, nullptr);
@@ -227,7 +227,7 @@ RouteResult bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
     }
 
     if (walkingRoutes.size() == 0) {
-        return INVALID_ROUTE;
+        return NO_WALKING_AVAILABLE;
     }
 
     bool foundPath = false;

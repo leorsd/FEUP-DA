@@ -5,7 +5,7 @@
 
 
 int askForMode(){
-    int choice;
+    std::string line;
     std::cout << "\n--- Route Planner Menu ---\n";
     std::cout << "\n";
     std::cout << "What method you want to use?\n";
@@ -15,16 +15,20 @@ int askForMode(){
 
     while (true){
         std::cout << "Enter Choice: ";
-        std::cin >> choice;
-
-        if(std::cin.fail()) {
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-            std::cout << "Invalid choice, please enter a number between 1 and 3\n";
-        } else if(choice < 1 || choice > 3) {
-            std::cout << "Invalid choice, please try again\n";
-        } else {
-            return choice;
+        try{
+            getline(std::cin, line);
+            if ( line.empty()){
+                std::cout << "Invalid input! An action needs to be chosen.\n";
+            }else{
+                int choice = std::stoi(line);
+                if (choice < 1 || choice > 3){
+                    std::cout << "Invalid input! Please enter a number between 1 and 3.\n";
+                }else{
+                    return choice;
+                }
+            }
+        } catch (...){
+            std::cout << "You entered a non-integer value, please try again.\n";
         }
     }
 }
