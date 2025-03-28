@@ -65,7 +65,7 @@ void displayBatchRestrictedRoute(int source, int dest, std::list<int>* restricte
     std::cout << "\nOutput file successfully created!" << std::endl;
 }
 
-void displayBatchDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, std::string message){
+void displayBatchDrivingWalkingRoute(int source, int dest, std::list<int>* drivingRoute, int drivingTime, std::list<int>* walkingRoute, int walkingTime, RouteResult result){
     std::ofstream outFile;
     if ( openFile(outFile) != 0) return;
 
@@ -73,7 +73,7 @@ void displayBatchDrivingWalkingRoute(int source, int dest, std::list<int>* drivi
     oss << "Source:" << source << std::endl;
     oss << "Destination:" << dest << std::endl;
 
-    if (message.size() == 0){
+    if (result == VALID_ROUTE){
 
         oss << "DrivingRoute:" << drivingRoute->front();
         for (auto it = std::next(drivingRoute->begin()); it != drivingRoute->end(); ++it) {
@@ -95,8 +95,73 @@ void displayBatchDrivingWalkingRoute(int source, int dest, std::list<int>* drivi
         oss << "ParkingNode:none\n";
         oss << "WalkingRoute:none\n";
         oss << "TotalTime:\n";
-        oss << message;
+        oss << "Message:";
+        switch (result){
+            case WALKING_TIME_EXCEEDED:
+                oss << "No possible path with the max. walking time provided." << std::endl;
+                outFile << oss.str();
+                outFile.close();
+                return;
+            case INVALID_ROUTE:
+                oss << "No possible path with the restrictions provided." << std::endl;
+                break;
+            case NO_PARKING_AVAILABLE:
+                oss << "No parking nodes available, impossible to find the desired path." << std::endl;
+                break;
+            case NO_WALKING_AVAILABLE:
+                oss << "No walking path can be found from any parking node to the destination node" << std::endl;
+                break;
+            case NO_DRIVING_AVAILABLE:
+                oss << "No driving path can be found from source node to any parking node" << std::endl;
+            default:
+                break;
+        }
     }
+    outFile << oss.str();
+    outFile.close();
+
+    std::cout << "\nOutput file successfully created!" << std::endl;
+}
+
+void displayBatchAproximateRoute(int source, int dest, std::list<int>* drivingRoute1, int drivingTime1, std::list<int>* walkingRoute1, int walkingTime1, std::list<int>* drivingRoute2, int drivingTime2, std::list<int>* walkingRoute2, int walkingTime2){
+    std::ofstream outFile("../Data/output.txt", std::ios::app); // Abre em modo append para não apagar o que foi escrito pelo display do 3º algoritmo
+    if (!outFile) {
+        std::cerr << "Error opening output.txt file." << std::endl;
+        return;
+    }
+    std::ostringstream oss;
+    oss << "\n--- Approximate Route ---\n\n";
+    oss << "Source:" << source << std::endl;
+    oss << "Destination:" << dest << std::endl;
+
+    // Primeira alternativa
+    oss << "DrivingRoute1:" << drivingRoute1->front();
+    for (auto it = std::next(drivingRoute1->begin()); it != drivingRoute1->end(); ++it) {
+        oss << "," << *it;
+    }
+    oss << "(" << drivingTime1 << ")" << std::endl;
+    oss << "ParkingNode1:" << walkingRoute1->front() << std::endl;
+    oss << "WalkingRoute1:" << walkingRoute1->front();
+    for (auto it = std::next(walkingRoute1->begin()); it != walkingRoute1->end(); ++it) {
+        oss << "," << *it;
+    }
+    oss << "(" << walkingTime1 << ")" << std::endl;
+    oss << "TotalTime1:" << (walkingTime1 + drivingTime1) << std::endl;
+
+    // Segunda alternativa
+    oss << "DrivingRoute2:" << drivingRoute2->front();
+    for (auto it = std::next(drivingRoute2->begin()); it != drivingRoute2->end(); ++it) {
+        oss << "," << *it;
+    }
+    oss << "(" << drivingTime2 << ")" << std::endl;
+    oss << "ParkingNode2:" << walkingRoute2->front() << std::endl;
+    oss << "WalkingRoute2:" << walkingRoute2->front();
+    for (auto it = std::next(walkingRoute2->begin()); it != walkingRoute2->end(); ++it) {
+        oss << "," << *it;
+    }
+    oss << "(" << walkingTime2 << ")" << std::endl;
+    oss << "TotalTime2:" << (walkingTime2 + drivingTime2) << std::endl;
+
     outFile << oss.str();
     outFile.close();
 

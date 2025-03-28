@@ -1,8 +1,7 @@
 #include "menu.h"
 
 Vertex* askSourceId(Graph* graph){
-    Vertex* sourceNode;
-    int sourceId;
+    std::string line;
 
     std::cout << "\n--- Route Planner Menu ---\n";
     std::cout << "\n";
@@ -10,28 +9,29 @@ Vertex* askSourceId(Graph* graph){
 
     while(true){
         std::cout << "Your choice: ";
-        std::cin >> sourceId;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, line);
 
-        if (std::cin.fail()) {
-            std::cout << "Invalid input! You entered a non-integer value.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }else{
-            sourceNode = graph->findVertex(sourceId);
-            if (sourceNode != nullptr){
-                break;
-            }else{
-                std::cout << "Source node id not found in the loaded graph, please try again.\n";
+        if (line.empty()){
+            std::cout << "Invalid input! You need to include the source node.\n";
+        }
+        else{
+            try{
+                int destID = std::stoi(line);
+                Vertex* sourceNode = graph->findVertex(destID);
+                if (sourceNode == nullptr){
+                    std::cout << "Invalid input! Source node not found in graph, please try again.\n";
+                }else{
+                    return sourceNode;
+                }
+            } catch (...){
+                std::cout << "Invalid input! You entered a non-integer value, please try again.\n";
             }
         }
     }
-    return sourceNode;
 }
 
 Vertex* askDestId(Graph* graph, Vertex* sourceNode){
-    Vertex* destNode;
-    int destId;
+    std::string line;
 
     std::cout << "\n--- Route Planner Menu ---\n";
     std::cout << "\n";
@@ -39,25 +39,27 @@ Vertex* askDestId(Graph* graph, Vertex* sourceNode){
 
     while(true){
         std::cout << "Your choice: ";
-        std::cin >> destId;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::getline(std::cin, line);
 
-        if (std::cin.fail()) {
-            std::cout << "Invalid input! You entered a non-integer value.\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        }else{
-            destNode = graph->findVertex(destId);
-            if (destNode == sourceNode){
-                std::cout << "Source node and destination node must be different, please choose other destination node.\n";
-            }else if (destNode == nullptr){
-                std::cout << "Destination node id not found in the loaded graph, please try again.\n";
-            }else{
-                break;
+        if (line.empty()){
+            std::cout << "Invalid input! You need to include the destination node.\n";
+        }
+        else{
+            try{
+                int destID = std::stoi(line);
+                Vertex* destNode = graph->findVertex(destID);
+                if (destNode == sourceNode){
+                    std::cout << "Source node and destination node must be different, please choose other destination node.\n";
+                }else if (destNode == nullptr){
+                    std::cout << "Invalid input! Destination node not found in graph, please try again.\n";
+                }else{
+                    return destNode;
+                }
+            } catch (...){
+                std::cout << "Invalid input! You entered a non-integer value, please try again.\n";
             }
         }
     }
-    return destNode;
 }
 
 void askAvoidNodes(Graph* graph, Vertex* sourceNode, Vertex* destNode){
@@ -65,7 +67,7 @@ void askAvoidNodes(Graph* graph, Vertex* sourceNode, Vertex* destNode){
 
     std::cout << "\n--- Route Planner Menu ---\n";
     std::cout << "\n";
-    std::cout << "What are the avoid nodes? (Use the id of the nodes, separate them by spaces)\n";
+    std::cout << "What are the avoid nodes? Use this method for input: id id id id etc...\n";
     std::cout << "Your choice: ";
 
     std::getline(std::cin, line);
@@ -178,25 +180,53 @@ int askMaxWalkTime(Graph* graph){
     std::cout << "\n";
     std::cout << "What is the max walk time?\n";
 
+    std::string  line;
+
+    while(true){
+        std::cout << "Your choice: ";
+        std::getline(std::cin, line);
+
+        if (line.empty()){
+            std::cout << "Invalid input! You need to include the max walk time.\n";
+        }
+        else{
+            try{
+                int walkTime = std::stoi(line);
+                return walkTime;
+            } catch (...){
+                std::cout << "Invalid input! You entered a non-integer value, please try again.\n";
+            }
+        }
+    }
+}
+
+bool askForAproximateSolution(){
+    std::cout << "\nDo you want a aproximate solution? 1 for yes, 0 for no\n";
+    int choice;
     while(true){
 
         std::cout << "Your choice: ";
-        std::cin >> maxWalkTime;
+        std::cin >> choice;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         if (std::cin.fail()) {
             std::cout << "Invalid input! You entered a non-integer value, please try again.\n";
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }else if (choice != 1 && choice != 0){
+            std::cout << "Invalid input! Please enter 0 or 1.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }else{
             break;
         }
     }
-    return maxWalkTime;
+    return (choice == 1);
 }
 
 void runMenuMode(Graph* graph){
     int alg;
+    std::string line;
 
     std::cout << "\n--- Route Planner Menu ---\n";
     std::cout << "\n";
@@ -206,21 +236,21 @@ void runMenuMode(Graph* graph){
     std::cout << "4. Exit\n";
 
     while (true) {
-
         std::cout << "Enter Choice: ";
-        std::cin >> alg;
+        getline(std::cin, line);
 
-        if (std::cin.fail()) {
-            std::cout << "Invalid input! You entered a non-integer value, please try again.\n";
-            std::cin.clear();
-            std::cin.ignore(1000, '\n');
+        if (line.empty()) {
+            std::cout << "Invalid input! You need to choose an algorithm or exit, please try again.\n";
         }else{
-            if (alg < 1 || alg > 4){
-                std::cout << "Invalid choice, please try again.\n";
-                std::cin.clear();
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            }else{
-                break;
+            try{
+                alg = std::stoi(line);
+                if (alg < 1 || alg > 4){
+                    std::cout << "Invalid choice, please try again.\n";
+                }else{
+                    break;
+                }
+            }catch (...){
+                std::cout << "You entered a non-integer value, please try again.\n";
             }
         }
     }
@@ -231,7 +261,12 @@ void runMenuMode(Graph* graph){
     std::list<int> alternativeRoute = {};
     int bestRouteTime = 0;
     int alternativeRouteTime = 0;
-    std::string message;
+    std::list<int> drivingRoute;
+    std::list<int> walkingRoute;
+    int walkingRouteTime = 0;
+    int drivingRouteTime = 0;
+
+    RouteResult result;
 
     switch (alg) {
         case 1:
@@ -265,9 +300,15 @@ void runMenuMode(Graph* graph){
             askAvoidEdges(graph);
             maxWalkTime = askMaxWalkTime(graph);
 
-            message = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
+            result = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
+            displayMenuDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, result);
 
-            displayMenuDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, message);
+            if (result == WALKING_TIME_EXCEEDED){
+                if (askForAproximateSolution()){
+                    aproximateSolution(graph, sourceNode, destNode,&bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime );
+                    displayMenuAproximateRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime);
+                }
+            }
             break;
         default:
             break;

@@ -21,7 +21,7 @@ Vertex* getNode(const std::string& line, Graph* graph) {
 	}
 }
 
-bool avoidNodes(const std::string& line, Graph* graph) {
+bool avoidNodes(const std::string& line, Graph* graph, Vertex* source, Vertex* destination) {
   	std::istringstream iss(line);
     std::string word;
     while (std::getline(iss, word, ',')){
@@ -31,8 +31,11 @@ bool avoidNodes(const std::string& line, Graph* graph) {
 			if(node==nullptr){
 				std::cout<<"ERROR: Vertex with id "<<id<<" not found in graph."<<std::endl;
 				return false;
+			}else if( node==source || node==destination){
+                std::cout<<"ERROR: Cannot avoid the source or the destination node."<<std::endl;
+                return false;
 			}else{
-				node->setAvoid(true);
+                node->setAvoid(true);
 			}
 		}catch(...){
 			std::cout<<"ERROR: Invalid input! Incorrect syntax in avoid nodes line."<<line<<std::endl;
@@ -183,17 +186,16 @@ void runBatchMode(Graph* graph){
 
         	displayBatchIndependentRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime);
             return;
+        }else{
+        	if (startsWith(line, "AvoidNodes:")) {
+        		if(!avoidNodes(line.substr(11),graph, sourceNode, destNode)){
+        			return;
+        		}
+        	}else{
+        		std::cout<<"ERROR: Invalid input! 4th line needs to contain the avoid nodes with the defined syntax."<<std::endl;
+        		return;
+        	}
         }
-
-        std::getline(input_file, line);
-		if (startsWith(line, "AvoidNodes:")) {
-			if(!avoidNodes(line.substr(11),graph)){
-				return;
-			}
-		}else{
-			std::cout<<"ERROR: Invalid input! 4th line needs to contain the avoid nodes with the defined syntax."<<std::endl;
-			return;
-		}
 
         std::getline(input_file, line);
 		if (startsWith(line, "AvoidSegments:")) {
@@ -266,7 +268,7 @@ void runBatchMode(Graph* graph){
 
 		std::getline(input_file, line);
 		if (startsWith(line, "AvoidNodes:")) {
-			if(!avoidNodes(line.substr(11),graph)){
+			if(!avoidNodes(line.substr(11),graph, sourceNode, destNode)){
 				return;
 			}
 		}else{
@@ -295,9 +297,16 @@ void runBatchMode(Graph* graph){
 		int drivingRouteTime;
 		int walkingRouteTime;
 
-		std::string message = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime);
-
-		displayBatchDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime, message);
+		RouteResult result = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime);
+		displayBatchDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime, result);
+        if ( result == WALKING_TIME_EXCEEDED){
+            std::list<int> drivingRoute2 = {};
+            std::list<int> walkingRoute2 = {};
+            int drivingRouteTime2;
+            int walkingRouteTime2;
+        	aproximateSolution(graph, sourceNode, destNode, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime, &drivingRoute2, &drivingRouteTime2, &walkingRoute2, &walkingRouteTime2);
+			displayBatchAproximateRoute(sourceNode->getId(), destNode->getId(), &drivingRoute, drivingRouteTime, &walkingRoute, walkingRouteTime, &drivingRoute2, drivingRouteTime2, &walkingRoute2, walkingRouteTime2);
+        }
         return;
 	}else{
         std::cout<<"ERROR: Invalid input! Unknown mode value."<<std::endl;

@@ -12,7 +12,7 @@ bool startsWith(const std::string& line, const std::string& prefix);
 
 Vertex* getNode(const std::string& line, Graph* graph);
 
-bool avoidNodes(const std::string& line, Graph* graph);
+bool avoidNodes(const std::string& line, Graph* graph, Vertex* sourceNode, Vertex* destNode);
 
 bool avoidSegments(const std::string& line, Graph* graph);
 
