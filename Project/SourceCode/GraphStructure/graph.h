@@ -11,6 +11,11 @@ class Edge;
 
 /************************* Vertex  **************************/
 
+/**
+ * @brief Class representing a vertex in the graph.
+ * 
+ * @details The Vertex class contains information about the vertex such as its id, location, code and parking availability. It also provides methods to manipulate edges and manage the state of the vertex during graph algorithms.
+ */
 class Vertex {
 public:
     Vertex(std::string location, int id, std::string code, bool parking);
@@ -52,7 +57,7 @@ protected:
     std::string location;      // Location name
     std::string code;          // Unique code
     bool parking;              // Parking availability
-    bool avoid = false;               // Used for algorithsm that need to avoid vertexs
+    bool avoid = false;       // Used for algorithsm that need to avoid vertexs
 
     std::vector<Edge *> adj;   // Outgoing edges
 
@@ -69,6 +74,11 @@ protected:
 
 /********************** Edge  ****************************/
 
+/**
+ * @brief Class representing an edge in the graph.
+ * 
+ * @details The Edge class contains information about the edge such as its origin and destination vertices, driving time, walking time and whether it should be avoided. It also provides methods to manipulate the state of the edge during graph algorithms.
+ */
 class Edge {
 public:
     Edge(Vertex *orig, Vertex *dest, double drivingTime, double walkingTime);
@@ -91,8 +101,8 @@ public:
 protected:
     Vertex *orig;  // Origin vertex
     Vertex *dest;  // Destination vertex
-    double drivingTime;
-    double walkingTime;
+    double drivingTime;     // Driving time of the edge
+    double walkingTime;     // Walking time of the edge
     bool avoid = false;    // Used for algorithms that need to avoid edges
 
     // Auxiliary fields
@@ -102,6 +112,11 @@ protected:
 
 /********************** Graph  ****************************/
 
+/**
+ * @brief Class representing the graph structure.
+ * 
+ * @details The Graph class contains a collection of vertices and provides methods to manipulate the graph such as adding and removing vertices and edges, and retrieving vertex information. It also provides methods to get the number of vertices and the set of vertices in the graph.
+ */
 class Graph {
 public:
     Vertex *findVertex(const std::string &code) const;
