@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['addbidirectionaledge_0',['addBidirectionalEdge',['../classGraph.html#a13f6c13148c7ef1e27c34bf58f9d07e2',1,'Graph']]],
+  ['addedge_1',['addedge',['../classVertex.html#a50858b31f0fbfeaa48e25afb1d82c35d',1,'Vertex::addEdge()'],['../classGraph.html#abf47d647190562de28c10759ad56f5ea',1,'Graph::addEdge(const std::string &amp;source, const std::string &amp;dest, double drivingTime, double walkingTime)']]],
+  ['addvertex_2',['addVertex',['../classGraph.html#ad300cc62970448cd713b5eeb11eb008e',1,'Graph']]],
+  ['adj_3',['adj',['../classVertex.html#a0be7a8d322f99d4812261af91c3e2178',1,'Vertex']]],
+  ['algorithms_2ecpp_4',['algorithms.cpp',['../algorithms_8cpp.html',1,'']]],
+  ['algorithms_2eh_5',['algorithms.h',['../algorithms_8h.html',1,'']]],
+  ['aproximatesolution_6',['aproximatesolution',['../algorithms_8cpp.html#a014ec703e4996c0751580ebd19c4b19c',1,'aproximateSolution(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::list&lt; int &gt; *drivingRoute1, int *drivingTime1, std::list&lt; int &gt; *walkingRoute1, int *walkingTime1, std::list&lt; int &gt; *drivingRoute2, int *drivingTime2, std::list&lt; int &gt; *walkingRoute2, int *walkingTime2):&#160;algorithms.cpp'],['../algorithms_8h.html#a014ec703e4996c0751580ebd19c4b19c',1,'aproximateSolution(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::list&lt; int &gt; *drivingRoute1, int *drivingTime1, std::list&lt; int &gt; *walkingRoute1, int *walkingTime1, std::list&lt; int &gt; *drivingRoute2, int *drivingTime2, std::list&lt; int &gt; *walkingRoute2, int *walkingTime2):&#160;algorithms.cpp']]],
+  ['askavoidedges_7',['askavoidedges',['../menu_8cpp.html#a1a422000ffcb3c620e0d37b42ccb4466',1,'askAvoidEdges(Graph *graph):&#160;menu.cpp'],['../menu_8h.html#a1a422000ffcb3c620e0d37b42ccb4466',1,'askAvoidEdges(Graph *graph):&#160;menu.cpp']]],
+  ['askavoidnodes_8',['askavoidnodes',['../menu_8cpp.html#ad432cfee47a1b7e300b84f730747bd8a',1,'askAvoidNodes(Graph *graph, Vertex *sourceNode, Vertex *destNode):&#160;menu.cpp'],['../menu_8h.html#ad432cfee47a1b7e300b84f730747bd8a',1,'askAvoidNodes(Graph *graph, Vertex *sourceNode, Vertex *destNode):&#160;menu.cpp']]],
+  ['askdestid_9',['askdestid',['../menu_8cpp.html#a713861be1a0b322cd5d7a0ad96e1a3ba',1,'askDestId(Graph *graph, Vertex *sourceNode):&#160;menu.cpp'],['../menu_8h.html#a713861be1a0b322cd5d7a0ad96e1a3ba',1,'askDestId(Graph *graph, Vertex *sourceNode):&#160;menu.cpp']]],
+  ['askforaproximatesolution_10',['askForAproximateSolution',['../menu_8cpp.html#a0821006321c12911142757606279d634',1,'menu.cpp']]],
+  ['askformode_11',['askForMode',['../main_8cpp.html#a465764db21b38b181efcb499a9e7e90d',1,'main.cpp']]],
+  ['askincludenode_12',['askincludenode',['../menu_8cpp.html#ab43e3c180c72fe927f2791a8f502cb34',1,'askIncludeNode(Graph *graph, Vertex *sourceNode, Vertex *destNode):&#160;menu.cpp'],['../menu_8h.html#ab43e3c180c72fe927f2791a8f502cb34',1,'askIncludeNode(Graph *graph, Vertex *sourceNode, Vertex *destNode):&#160;menu.cpp']]],
+  ['askmaxwalktime_13',['askmaxwalktime',['../menu_8cpp.html#a1cfef028f9b5e1b324ec5a882a348888',1,'askMaxWalkTime(Graph *graph):&#160;menu.cpp'],['../menu_8h.html#a1cfef028f9b5e1b324ec5a882a348888',1,'askMaxWalkTime(Graph *graph):&#160;menu.cpp']]],
+  ['asksourceid_14',['asksourceid',['../menu_8cpp.html#a4ac1aad42165447514c25bda09b867a7',1,'askSourceId(Graph *graph):&#160;menu.cpp'],['../menu_8h.html#a4ac1aad42165447514c25bda09b867a7',1,'askSourceId(Graph *graph):&#160;menu.cpp']]],
+  ['authors_3a_15',['Authors:',['../index.html#autotoc_md3',1,'']]],
+  ['avoid_16',['avoid',['../classEdge.html#a79ba5cf3ce8fb1e17f37955b7d50ed98',1,'Edge::avoid'],['../classVertex.html#adcb792cc794ceb05283e2df4d81d1559',1,'Vertex::avoid']]],
+  ['avoidnodes_17',['avoidnodes',['../batch_8cpp.html#ae0faba9a92246e5c0746b88626ded4e5',1,'avoidNodes(const std::string &amp;line, Graph *graph, Vertex *source, Vertex *destination):&#160;batch.cpp'],['../batch_8h.html#a652dace6b57900b1b85f41035a937a07',1,'avoidNodes(const std::string &amp;line, Graph *graph, Vertex *sourceNode, Vertex *destNode):&#160;batch.cpp']]],
+  ['avoidsegments_18',['avoidsegments',['../batch_8cpp.html#a27584a91eca86b38fea2fa956f4afdea',1,'avoidSegments(const std::string &amp;line, Graph *graph):&#160;batch.cpp'],['../batch_8h.html#a27584a91eca86b38fea2fa956f4afdea',1,'avoidSegments(const std::string &amp;line, Graph *graph):&#160;batch.cpp']]]
+];

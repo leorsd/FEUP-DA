@@ -1,5 +1,10 @@
 #include "graph.h"
 
+/**
+ * @file graph.cpp
+ * @brief This file contains the implementation of the graph data structure declared in the graph.h
+ */
+
 /************************* Vertex  **************************/
 
 Vertex::Vertex(std::string location, int id, std::string code, bool parking) {

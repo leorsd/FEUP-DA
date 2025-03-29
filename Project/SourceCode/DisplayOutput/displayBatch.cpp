@@ -1,5 +1,10 @@
 #include "displayBatch.h"
 
+/**
+ * @file displayBatch.cpp
+ * @brief This file contains the implementation of the displayBatch functions declared in displayBatch.h
+ */
+
 int openFile(std::ofstream& outputFile){
   outputFile.open("../Data/output.txt");
   if (!outputFile){

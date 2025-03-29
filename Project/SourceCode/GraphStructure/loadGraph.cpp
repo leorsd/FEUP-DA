@@ -1,5 +1,10 @@
 #include "loadGraph.h"
 
+/**
+ * @file loadGraph.cpp
+ * @brief This file contains the implementation of the loadGraph function declared in loadGraph.h
+ */
+
 void loadGraph(const std::string& vertex_filename, const std::string& edge_filename, Graph* g) {
 
     // Process the vertex file

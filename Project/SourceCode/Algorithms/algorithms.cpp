@@ -1,5 +1,10 @@
 #include "algorithms.h"
 
+/**
+ * @file algorithms.cpp
+ * @brief Implementation of the algorithms declared in algorithms.h
+ */
+
 bool relaxDriving(Edge *edge) {
     Vertex *org = edge->getOrig();
     Vertex *dest = edge->getDest();

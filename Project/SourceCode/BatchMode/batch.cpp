@@ -1,5 +1,10 @@
 #include "batch.h"
 
+/**
+ * @file batch.cpp
+ * @brief This file contains the implementation of the batch mode functions defined in batch.h
+ */
+
 bool startsWith(const std::string& line, const std::string& prefix) {
     return line.substr(0, prefix.length()) == prefix;
 }

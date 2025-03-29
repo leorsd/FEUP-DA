@@ -1,5 +1,10 @@
 #include "displayMenu.h"
 
+/**
+ * @file displayMenu.cpp
+ * @brief This file contains the implementation of the functions declared in displayMenu.h
+ */
+
 void displayMenuIndependentRoute(int source, int dest, std::list<int>* bestRoute, int bestRouteTime, std::list<int>* alternativeRoute, int alternativeRouteTime){
     std::stringstream ss;
 

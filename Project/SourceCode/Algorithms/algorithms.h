@@ -71,8 +71,6 @@ void dijkstraDriving(Graph *g, Vertex *sourceNode, Vertex *destNode);
 
 /**
  * @brief The function dijkstraWalking is used to calculate the shortest path for walking from the source node to the destination node or to all nodes if the destNode is nullptr.
- * The algorithm is done to ignore the nodes or the edges that have the avoid flag set to true, so this nodes and edges will not be included in the route. 
- * This is useful to avoid nodes that are not allowed to be used in the route, for example, nodes that need to be avoided due to the user restrictions or the nodes that were used for the best route and need to be avoided for the alternative route.
  * 
  * @details The algorithm is done to ignore the nodes or the edges that have the avoid flag set to true, so this nodes and edges will not be included in the route. 
  * This is useful to avoid nodes that are not allowed to be used in the route, for example, nodes that need to be avoided due to the user restrictions or the nodes that were used for the best route and need to be avoided for the alternative route.
@@ -89,6 +87,7 @@ void dijkstraWalking(Graph *g, Vertex *sourceNode, Vertex *destNode);
  * @brief Executes the algorithm to compute the best route from the source node to the destination node and an alternative route that not includes the same nodes.
  * 
  * @details The algorithm uses Dijkstra's algorithm to compute the shortest path from the source node to the destination node, for each one of the nodes that are in the best route, the avoid flag is set to true and the Dijkstra's algorithm is executed again to compute the alternative route. 
+ * 
  * The asymptotic complexity of the algorithm is set by the Dijkstra's algorithm for shortest paths, which is O((V + E) log V), where V is the number of vertices and E is the number of edges.
  * 
  * @param graph The graph to be used.

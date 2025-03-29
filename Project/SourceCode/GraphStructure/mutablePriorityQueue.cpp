@@ -1,5 +1,10 @@
 #include "mutablePriorityQueue.h"
 
+/**
+ * @file mutablePriorityQueue.cpp
+ * @brief Implementation of a mutable priority queue using a binary heap declared in the mutablePriorityQueue.h
+ */
+
 #define parent(i) ((i) / 2)
 #define leftChild(i) ((i) * 2)
 

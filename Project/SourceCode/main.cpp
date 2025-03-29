@@ -3,6 +3,48 @@
 #include "batch.h"
 #include "menu.h"
 
+/**
+ * @mainpage
+ *
+ * # DA2025_PRJ1_T04G02
+ * 
+ * Welcome to the documentation of the **Route Planner**.
+ * This project implements several algorithms for route planning and optimization.
+ * It provides two main modes of operation: Batch Mode and Menu Mode.
+ * In Batch Mode, the program reads input from a file and processes it automatically.
+ * In Menu Mode, the user can interactively input data and receive results.
+ * 
+ * ## Features
+ * - **Algorithm 1**: Independent route, for finding the shortest path between two locations.
+ * - **Algorithm 2**: Restricted route, for finding the shortest path between two locations with restrictions.
+ * - **Algorithm 3**: Driving-Walking combined route, for finding the shortest path, with restrictions, between two locations with a combination of driving and walking segments.
+ * - **Algorithm 4**: Aproximate route after a Driving-Walking failure.
+ * 
+ * ## Usage
+ * - To use the program, compile the source code and run the executable.
+ * - To compile the source code and run it, use the following commands:
+ *  ```
+ * cmake ..
+ * make
+ * ./DA_Project
+ * ```
+ * - The first command generates the build files, the second command compiles the source code, and the last command runs the program.
+ * - The program will start and the user will be available to interact with it.
+ *
+ * ### Authors:
+ * - Afonso Miguel Almeida Pereira, up202305652@up.pt
+ * - Leandro Filipe Pais Resende, up202306343@up.pt
+ * - Mo'men Sami Ahmad Alhammadin, up202411533@up.pt
+ *
+ */
+
+/**
+ * @file main.cpp
+ * @brief Main file for the Route Planner program.
+ * 
+ * This file contains the main function that initializes the graph, asks the user for the mode of operation, and runs the selected mode.
+ */
+
 
 /**
  * @brief Asks the user for the mode of operation.
