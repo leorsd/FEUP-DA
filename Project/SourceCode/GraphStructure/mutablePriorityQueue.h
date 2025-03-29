@@ -5,15 +5,18 @@
 #include "graph.h"
 
 /**
- * @file This file contains the definition of the MutablePriorityQueue class.
- * The MutablePriorityQueue class is used to implement a priority queue for the Dijkstra's algorithm.
- * The implementation of the MutablePriorityQueue class is done in the mutablePriorityQueue.cpp file.
+ * @file mutablePriorityQueue.h
+ * @brief Defines the MutablePriorityQueue class.
+ * 
+ * This file contains the definition of the MutablePriorityQueue class, which is used to implement a priority queue for Dijkstra's algorithm.
+ * The class is implemented in mutablePriorityQueue.cpp.
  */
 
 /**
  * @brief A class representing a mutable priority queue.
  * 
- * @details This class implements a mutable priority queue using a binary heap. It allows for efficient insertion, extraction of the minimum element, and decreasing the key of an element. It is used in  Dijkstra's algorithm to manage the vertices based on their distances.
+ * This class implements a mutable priority queue using a binary heap. It provides efficient operations for inserting elements, extracting the minimum element, and decreasing the key of an element. 
+ * It is used in Dijkstra's algorithm to manage vertices based on their distances from the source node.
  */
 class MutablePriorityQueue {
     std::vector<Vertex *> H;

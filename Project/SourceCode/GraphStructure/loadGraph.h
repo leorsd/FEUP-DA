@@ -7,8 +7,11 @@
 #include "graph.h"
 
 /**
- * @file This file contains the function declarations for loading the graph from CSV files.
- * The functions are implemented in the loadGraph.cpp file.
+ * @file loadGraph.h
+ * @brief Function declaration for loading a graph from CSV files.
+ * 
+ * This file contains the function declaration for reading vertex and edge data from CSV files and populating the graph structure. 
+ * The corresponding function implementation is in loadGraph.cpp.
  */
 
 /**

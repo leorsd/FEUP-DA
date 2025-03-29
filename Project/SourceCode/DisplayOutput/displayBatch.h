@@ -9,11 +9,12 @@
 #include "algorithms.h"
 
 /**
- * @file This file contains the function declarations for displaying the output in batch mode.
- * The functions are used to display the results of the algorithms in a predefined format.
- * The functions are implemented in the displayBatch.cpp file.
+ * @file displayBatch.h
+ * @brief Function declarations for displaying the results in batch mode.
+ * 
+ * This file contains the function declarations for displaying the results of various algorithms in a predefined format for batch processing. 
+ * These functions are implemented in the displayBatch.cpp file.
  */
-
 /**
  * @brief Function that opens the output file for writing.
  * 
