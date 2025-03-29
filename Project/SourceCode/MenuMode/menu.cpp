@@ -255,19 +255,23 @@ void runMenuMode(Graph* graph){
         }
     }
 
+    // Initializing variables that will be passed to the algorithms to store the results
+
     Vertex* sourceNode,*destNode, *includeNode;
     int maxWalkTime = 0;
     std::list<int> bestRoute = {};
     std::list<int> alternativeRoute = {};
     int bestRouteTime = 0;
     int alternativeRouteTime = 0;
-    std::list<int> drivingRoute;
-    std::list<int> walkingRoute;
+    std::list<int> drivingRoute = {};
+    std::list<int> walkingRoute = {};
     int walkingRouteTime = 0;
     int drivingRouteTime = 0;
 
     RouteResult result;
 
+
+    // Depending on the algorithm chosen, the corresponding questions are made, the algorithm is executed and the results are displayed
     switch (alg) {
         case 1:
             sourceNode = askSourceId(graph);
@@ -303,6 +307,7 @@ void runMenuMode(Graph* graph){
             result = bestRouteDrivingWalking(graph, sourceNode, destNode, maxWalkTime, &bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime);
             displayMenuDrivingWalkingRoute(sourceNode->getId(), destNode->getId(), &bestRoute, bestRouteTime, &alternativeRoute, alternativeRouteTime, result);
 
+            // If the result of the driving-walking algorithm is WALKING_TIME_EXCEEDED, the aroximate solution is possible and the user is asked if he wants it
             if (result == WALKING_TIME_EXCEEDED){
                 if (askForAproximateSolution()){
                     aproximateSolution(graph, sourceNode, destNode,&bestRoute, &bestRouteTime, &alternativeRoute, &alternativeRouteTime, &drivingRoute, &drivingRouteTime, &walkingRoute, &walkingRouteTime );

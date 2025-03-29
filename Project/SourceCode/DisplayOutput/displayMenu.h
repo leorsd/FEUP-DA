@@ -7,9 +7,11 @@
 #include "algorithms.h"
 
 /**
- * @file This file contains the function declarations for displaying the output in menu mode.
- * The functions are used to display the results of the algorithms in a user-friendly format.
- * The functions are implemented in the displayMenu.cpp file.
+ * @file displayMenu.h
+ * @brief Function declarations for displaying the results in menu mode.
+ * 
+ * This file contains the function declarations for displaying the results of various algorithms in a user-friendly format. 
+ * These functions are implemented in the displayMenu.cpp file.
  */
 
 /**

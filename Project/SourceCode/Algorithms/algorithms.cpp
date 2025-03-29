@@ -105,9 +105,8 @@ void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::l
       return;
     }
 
-        // Alternarive route
-
-
+    // Alternarive route
+    
     dijkstraDriving(graph, sourceNode, destNode);
     current = destNode;
     while (current && current->getPath()) {
@@ -129,6 +128,7 @@ void independentRoute(Graph *graph, Vertex *sourceNode, Vertex *destNode, std::l
 void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex* includeNode, std::list<int>* restrictedRoute, int* restrictedRouteTime) {
     *restrictedRouteTime = 0;
 
+    // If the includeNode is not provided, we will find the route from sourceNode to destNode using a normal Dijkstra's algorithm
     if(includeNode == nullptr){
         dijkstraDriving(graph, sourceNode, destNode);
 
@@ -140,6 +140,8 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
         }
 
         restrictedRoute->push_front(sourceNode->getId());
+
+    // If the includeNode is provided, we will find the route from sourceNode to includeNode and then from includeNode to destNode    
     } else{
 
         dijkstraDriving(graph, sourceNode, includeNode);
@@ -167,6 +169,7 @@ void restrictedRoute(Graph* graph, Vertex* sourceNode, Vertex* destNode, Vertex*
             current = current->getPath()->getOrig();
         }
 
+        // Stores the segment of the path from includeNode to destNode in the list that already contains the path from sourceNode to includeNode
         restrictedRoute->splice(restrictedRoute->end(), secondPartOfPath);
     }
 }
@@ -185,6 +188,8 @@ RouteResult bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
     if (parkingNodes.size() == 0) {
         return NO_PARKING_AVAILABLE;
     }
+
+    // Finds the best driving segments from the source to each parking node and stores them in the drivingRoutes vector
 
     dijkstraDriving(graph, sourceNode, nullptr);
 
@@ -207,6 +212,8 @@ RouteResult bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
     if (drivingRoutes.size() == 0) {
         return NO_DRIVING_AVAILABLE;
     }
+
+    // Finds the best walking segments from each parking node to the destination and stores them in the walkingRoutes vector
 
     dijkstraWalking(graph, destNode, nullptr);
 
@@ -233,6 +240,7 @@ RouteResult bestRouteDrivingWalking(Graph* graph, Vertex* sourceNode, Vertex* de
     bool foundPath = false;
     bool foundWithMaxTime = false;
 
+    // Finds the best combinations of driving and walking routes
     *walkingTime = 1e6;
     *drivingTime = 1e6;
     for (auto driv : drivingRoutes) {
@@ -272,6 +280,7 @@ void aproximateSolution(Graph* graph, Vertex* sourceNode, Vertex* destNode, std:
         }
     }
 
+    // Finds the best driving segments from the source to each parking node and stores them in the drivingRoutes vector
     dijkstraDriving(graph, sourceNode, nullptr);
 
     for (Vertex *v : parkingNodes) {
@@ -290,6 +299,7 @@ void aproximateSolution(Graph* graph, Vertex* sourceNode, Vertex* destNode, std:
         }
     }
 
+    // Finds the best walking segments from each parking node to the destination and stores them in the walkingRoutes vector
     dijkstraWalking(graph, destNode, nullptr);
 
     for (Vertex *v : parkingNodes) {
@@ -308,6 +318,7 @@ void aproximateSolution(Graph* graph, Vertex* sourceNode, Vertex* destNode, std:
         }
     }
 
+    // Finds the best combinations of driving and walking routes
     *walkingTime1 = 1e6;
     *drivingTime1 = 1e6;
     *walkingTime2 = 1e6;

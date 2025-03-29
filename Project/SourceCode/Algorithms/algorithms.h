@@ -11,9 +11,12 @@
 #include "mutablePriorityQueue.h"
 
 /**
- * @brief This file contains the function declarations for the algorithms used in the project.
- * This file also contians the RouteResult enum that is used to indicate the result of the bestRouteDrivingWalking function.
- * The algorithms are implemented in the algorithms.cpp file.
+ * @file algorithms.h
+ * @brief Function declarations for the algorithms used in the project.
+ * 
+ * This file contains the function declarations for various algorithms implemented in the project. 
+ * It also defines the RouteResult enum, which is used to indicate the result of the bestRouteDrivingWalking function. 
+ * These functions are implemented in the algorithms.cpp file.
  */
 
 

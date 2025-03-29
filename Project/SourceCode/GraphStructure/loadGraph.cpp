@@ -1,6 +1,8 @@
 #include "loadGraph.h"
 
 void loadGraph(const std::string& vertex_filename, const std::string& edge_filename, Graph* g) {
+
+    // Process the vertex file
     std::ifstream vertex_file(vertex_filename);
 
     if(!vertex_file.is_open()) {
@@ -36,6 +38,7 @@ void loadGraph(const std::string& vertex_filename, const std::string& edge_filen
 
     vertex_file.close();
 
+    // Process the edge file
     std::ifstream edge_file(edge_filename);
 
     if (!edge_file.is_open()) {
