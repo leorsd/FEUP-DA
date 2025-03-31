@@ -5,7 +5,40 @@
 
 
 bool changeMakingDP(unsigned int C[], unsigned int Stock[], unsigned int n, unsigned int T, unsigned int usedCoins[]) {
+    std::vector<std::vector<int>> dp(n + 1, std::vector<int>(T + 1, -1));
+    std::vector<std::vector<int>> used(n + 1, std::vector<int>(T + 1, 0));
+    for (unsigned int i = 0; i <= n; i++) {
+        dp[i][0] = 0;
+    }
 
+    for (unsigned int i = 1; i <= n; i++) {
+        for (unsigned int t = 0; t <= T; t++) {
+            dp[i][t] = dp[i - 1][t];
+            used[i][t] = 0;
+
+            if (t >= C[i - 1]) {
+                for (unsigned int k = 1; k <= Stock[i - 1] && k * C[i - 1] <= t; k++) {
+                    if (dp[i - 1][t - k * C[i - 1]] != -1) {
+                        int new_count = dp[i - 1][t - k * C[i - 1]] + k;
+                        if (dp[i][t] == -1 || new_count < dp[i][t]) {
+                            dp[i][t] = new_count;
+                            used[i][t] = k;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (dp[n][T] == -1) return false;
+
+    unsigned int t = T;
+    for (int i = n; i > 0; i--) {
+        usedCoins[i - 1] = used[i][t];
+        t -= used[i][t] * C[i - 1];
+    }
+
+    return true;
 }
 
 /// TESTS ///

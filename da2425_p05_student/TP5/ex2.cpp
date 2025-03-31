@@ -2,7 +2,33 @@
 #include "exercises.h"
 
 unsigned int knapsackDP(unsigned int values[], unsigned int weights[], unsigned int n, unsigned int maxWeight, bool usedItems[]) {
+    std::vector<std::vector<unsigned int>> dp(n + 1, std::vector<unsigned int>(maxWeight+1, 0));
+    std::vector<std::vector<bool>> used(n + 1, std::vector<bool>(maxWeight +1 , false));
+    for (unsigned int i = 1; i <= n; i++) {
+        for (unsigned int w = 0; w <= maxWeight; w++) {
+            if (weights[i-1] <= w) {
+                if ( values[i-1] + dp[i-1][w - weights[i-1]] > dp[i-1][w] ) {
+                    dp[i][w] = values[i-1] + dp[i-1][w - weights[i-1]];
+                    used[i][w] = true;
+                }else {
+                    dp[i][w] = dp[i-1][w];
+                }
+            }else {
+                dp[i][w] = dp[i-1][w];
+            }
+        }
+    }
+    unsigned int w = maxWeight;
+    for (int i = n; i > 0; i--) {
+        if (used[i][w]) {
+            usedItems[i - 1] = true;
+            w -= weights[i - 1];
+        } else {
+            usedItems[i - 1] = false;
+        }
+    }
 
+    return dp[n][maxWeight];
 }
 
 /// TESTS ///
