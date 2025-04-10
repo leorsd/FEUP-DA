@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.26)
 
-# Project name
+# Project1 name
 project(DA_Project)
 
 # Specify C++ standard

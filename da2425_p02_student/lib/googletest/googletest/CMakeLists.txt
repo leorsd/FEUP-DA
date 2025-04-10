@@ -35,7 +35,7 @@ endif()
 
 ########################################################################
 #
-# Project-wide settings
+# Project1-wide settings
 
 # Name of the project.
 #
@@ -44,7 +44,7 @@ endif()
 # ${gtest_BINARY_DIR}.
 # Language "C" is required for find_package(Threads).
 
-# Project version:
+# Project1 version:
 
 cmake_minimum_required(VERSION 3.13)
 project(gtest VERSION ${GOOGLETEST_VERSION} LANGUAGES CXX C)

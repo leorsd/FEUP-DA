@@ -28,7 +28,7 @@ endif()
 
 ########################################################################
 #
-# Project-wide settings
+# Project1-wide settings
 
 # Name of the project.
 #
