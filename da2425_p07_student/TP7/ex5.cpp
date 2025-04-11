@@ -1,7 +1,30 @@
 
 #include "exercises.h"
+#include <algorithm>
+
+
+bool subsetSumRecursion(unsigned int A[], unsigned int n, unsigned int T, unsigned int currentIndex, unsigned int subset[], unsigned int subsetSize,unsigned int currentSum, unsigned int maxSubset[], unsigned int &maxSubsetSize) {
+    if (currentSum == T) {
+        std::copy(subset, subset + subsetSize, maxSubset);
+        maxSubsetSize = subsetSize;
+        return true;
+    }
+    if (currentIndex == n) {
+        return false;
+    }
+
+    if (currentSum >= T) {
+        return false;
+    }
+    if (subsetSumRecursion(A,n,T,currentIndex+1,subset,subsetSize,currentSum,maxSubset,maxSubsetSize) == true){return true;}
+    subset[subsetSize] = A[currentIndex];
+    if ( subsetSumRecursion(A,n,T,currentIndex+1,subset,subsetSize+1, currentSum+A[currentIndex], maxSubset, maxSubsetSize) == true) {return true;}
+    return false;
+}
 
 bool subsetSumBT(unsigned int A[], unsigned int n, unsigned int T, unsigned int subset[], unsigned int &subsetSize) {
+    unsigned int auxSubset[n];
+    return subsetSumRecursion(A,n,T,0,auxSubset,0,0,subset,subsetSize);
 }
 
 /// TESTS ///

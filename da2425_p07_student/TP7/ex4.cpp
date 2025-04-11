@@ -1,6 +1,24 @@
 #include "exercises.h"
 
-bool Labyrinth::findGoal(int x, int y) {}
+bool Labyrinth::findGoal(int x, int y) {
+    visited[x][y] = true;
+    if (labyrinth[x][y] == 2) {
+        return true;
+    }
+    if (labyrinth[x+1][y] != 0 && !visited[x+1][y]) {
+        if ( findGoal(x+1, y) == true ){return true;}
+    }
+    if (labyrinth[x-1][y] != 0 && !visited[x-1][y]) {
+        if ( findGoal(x-1, y) == true ){return true;}
+    }
+    if (labyrinth[x][y-1] != 0 && !visited[x][y-1]) {
+        if ( findGoal(x, y-1) == true ){return true;}
+    }
+    if (labyrinth[x][y+1] != 0 && !visited[x][y+1]) {
+        if (  findGoal(x, y+1) ==  true ){return true;}
+    }
+    return false;
+}
 
 
 /// TESTS ///
