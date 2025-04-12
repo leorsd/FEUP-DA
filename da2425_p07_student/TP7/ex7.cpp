@@ -1,7 +1,41 @@
 
+#include <algorithm>
+
 #include "exercises.h"
+bool Activity::overlaps(const Activity &a2) const {
+    return !(finish <= a2.start || a2.finish <= start);
+}
+
+bool Activity::operator==(const Activity &a2) const {
+    return finish == a2.finish && start == a2.start;
+}
+
+bool Activity::operator<(const Activity &a2) const {
+    return finish < a2.finish;
+}
+
+void activityRecur(std::vector<Activity>& A, std::vector<Activity>& current, std::vector<Activity>& best, unsigned int index) {
+    if (index == A.size()) {
+        if (current.size() > best.size()) {
+            best = current;
+        }
+        return;
+    }
+
+    activityRecur(A, current, best, index + 1);
+
+    if (current.empty() || A[index].start >= current.back().finish) {
+        current.push_back(A[index]);
+        activityRecur(A, current, best, index + 1);
+        current.pop_back(); // backtrack
+    }
+}
 
 std::vector<Activity> activitySelectionBT(std::vector<Activity> A) {
+    std::sort(A.begin(), A.end());
+    std::vector<Activity> current, best;
+    activityRecur(A, current, best, 0);
+    return best;
 }
 
 /// TESTS ///
@@ -16,11 +50,6 @@ bool noOverlaps(const std::vector<Activity> &acts) {
         }
     }
     return true;
-}
-
-
-bool Activity::overlaps(const Activity &a2) const {
-    return !(finish <= a2.start || a2.finish <= start);
 }
 
 TEST(TP7_Ex7, activityScheduling) {

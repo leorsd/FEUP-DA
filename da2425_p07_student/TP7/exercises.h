@@ -38,6 +38,7 @@ public:
     Activity(unsigned int s, unsigned int f): start(s), finish(f){};
     bool operator==(const Activity &a2) const;
     bool overlaps(const Activity &a2) const;
+    bool operator<(const Activity &a2) const;
 };
 std::vector<Activity> activitySelectionBT(std::vector<Activity> A);
 

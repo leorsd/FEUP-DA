@@ -1,6 +1,41 @@
 #include "exercises.h"
+#include <algorithm>
+#include <vector>
+#include <climits>
+
+void tspBacktrack(const unsigned int** dists, unsigned int n, unsigned int currentCity,unsigned int visitedCount, unsigned int currentCost,std::vector<bool>& visited, std::vector<unsigned int>& currentPath,unsigned int& minCost, unsigned int* bestPath) {
+    if (visitedCount == n) {
+        unsigned int totalCost = currentCost + dists[currentCity][0];
+        if (totalCost < minCost) {
+            minCost = totalCost;
+            std::copy(currentPath.begin(), currentPath.end(), bestPath);
+        }
+        return;
+    }
+    if (currentCost > minCost) {
+        return;
+    }
+
+    for (unsigned int next = 1; next < n; next++) {
+        if (!visited[next]) {
+            visited[next] = true;
+            currentPath[visitedCount] = next;
+            tspBacktrack(dists, n, next, visitedCount + 1,currentCost + dists[currentCity][next], visited, currentPath, minCost, bestPath);
+            visited[next] = false;
+        }
+    }
+}
 
 unsigned int tspBT(const unsigned int **dists, unsigned int n, unsigned int path[]) {
+    std::vector<bool> visited(n, false);
+    std::vector<unsigned int> currentPath(n);
+    visited[0] = true;
+    currentPath[0] = 0;
+
+    unsigned int minCost = UINT_MAX;
+    tspBacktrack(dists, n, 0, 1, 0, visited, currentPath, minCost, path);
+
+    return minCost;
 }
 
 /// TESTS ///

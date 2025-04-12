@@ -1,7 +1,30 @@
 #include "exercises.h"
+#include <algorithm>
+
+bool changeRecur(unsigned int C[], unsigned int Stock[], unsigned int n, unsigned int T,unsigned int currentValue, unsigned int currentCoins[], unsigned int currentIndex, unsigned int usedCoins[]) {
+    if (currentValue == T) {
+        std::copy(currentCoins, currentCoins+n, usedCoins);
+        return true;
+    }
+    if (currentIndex == n) {
+        return false;
+    }
+    for (unsigned int i = 0; i <= Stock[currentIndex]; ++i) {
+        currentCoins[currentIndex] = i;
+        if (changeRecur(C, Stock, n, T, currentValue + i * C[currentIndex], currentCoins, currentIndex + 1, usedCoins)) {
+            return true;
+        }
+    }
+    currentCoins[currentIndex] = 0;
+    return false;
+}
 
 bool changeMakingBT(unsigned int C[], unsigned int Stock[], unsigned int n, unsigned int T, unsigned int usedCoins[]) {
+    unsigned int currentCoins[n] = {0};
+
+    return changeRecur(C,Stock, n, T, 0, currentCoins, 0, usedCoins);
 }
+
 
 /// TESTS ///
 #include <gtest/gtest.h>
