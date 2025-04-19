@@ -12,6 +12,8 @@ set(SOURCES
         main.cpp
         DataStructures/loadTruck.cpp
         DataStructures/loadPallets.cpp
+        Algorithms/algorithms.cpp
+        DisplayResults/displayResults.cpp
 )
 
 # Define the header files
@@ -20,11 +22,15 @@ set(HEADERS
         DataStructures/pallet.h
         DataStructures/loadTruck.h
         DataStructures/loadPallets.h
+        Algorithms/algorithms.h
+        DisplayResults/displayResults.h
 )
 
 # Include directories
 include_directories(
         ${CMAKE_SOURCE_DIR}/DataStructures
+        ${CMAKE_SOURCE_DIR}/Algorithms
+        ${CMAKE_SOURCE_DIR}/DisplayResults
 )
 
 # Create the executable
