@@ -12,6 +12,17 @@
  */
 
 /**
+ * @brief Function to display a message indicating that the input size is too big for the selected algorithm.
+ *
+ * @details This function informs the user that the input size is too big for the selected algorithm and suggests selecting a smaller input size.
+ *          It also provides information about the maximum input size for the selected algorithm.
+ * 
+ * @param algorithm The algorithm used.
+ * @param inputSize The size of the input.
+ */
+ void displayInputSizeToBig(int algorithm, int inputSize);
+
+/**
  * @brief Function to display the results of the algorithm.
  * 
  * @param algorithm The algorithm used (1-5).

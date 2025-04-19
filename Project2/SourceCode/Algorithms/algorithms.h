@@ -12,16 +12,6 @@
  */
 
 /**
- * @brief Function to find the optimal solution for the pallet packing problem.
- * 
- * @param truck The truck structure containing truck data.
- * @param pallets A vector of pallets to be packed.
- * @param selectedPallets A vector of booleans indicating which pallets are selected.
- */
-void optimalSolution(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets);
-
-
-/**
  * @brief Function to implement the brute force approach for the pallet packing problem.
  * 
  * @param truck The truck structure containing truck data.

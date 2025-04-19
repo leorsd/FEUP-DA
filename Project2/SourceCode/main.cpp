@@ -97,8 +97,6 @@ int main(){
         std::vector<bool> selectedPallets(pallets.size(), false);
         std::vector<bool> optimalPallets(pallets.size(), false);
 
-        optimalSolution(truck, pallets, optimalPallets);
-
         std::chrono::time_point<std::chrono::high_resolution_clock> start;
         std::chrono::time_point<std::chrono::high_resolution_clock> end;
 
@@ -108,41 +106,55 @@ int main(){
                 bruteForceApproach(truck, pallets, selectedPallets);
                 end = std::chrono::high_resolution_clock::now();
 
-                displayAlgorithmResult(1, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                optimalPallets = selectedPallets; // Assuming brute force gives the optimal solution
+
+                displayAlgorithmResult(1, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
                 break;
             case 2:
-                start = std::chrono::high_resolution_clock::now();
-                backtrackingApproach(truck, pallets, selectedPallets);
-                end = std::chrono::high_resolution_clock::now();
+                if (truck.availablePallets > 30){
+                    displayInputSizeToBig(2, truck.availablePallets);
+                }else{
+                    start = std::chrono::high_resolution_clock::now();
+                    backtrackingApproach(truck, pallets, selectedPallets);
+                    end = std::chrono::high_resolution_clock::now();
 
-                displayAlgorithmResult(2, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                    optimalPallets = selectedPallets; // Assuming backtracking gives the optimal solution
+
+                    displayAlgorithmResult(2, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+                }
                 break;
             case 3:
                 start = std::chrono::high_resolution_clock::now();
                 greedyApproach(truck, pallets, selectedPallets);
                 end = std::chrono::high_resolution_clock::now();
 
-                displayAlgorithmResult(3, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                backtrackingApproach(truck, pallets, optimalPallets); // Uses backtracking to find the optimal solution
+
+                displayAlgorithmResult(3, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
                 break;
             case 4:
                 start = std::chrono::high_resolution_clock::now();
                 dynamicProgrammingApproach(truck, pallets, selectedPallets);
                 end = std::chrono::high_resolution_clock::now();
 
-                displayAlgorithmResult(4, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                optimalPallets = selectedPallets; // Assuming dynamic programming gives the optimal solution
+
+                displayAlgorithmResult(4, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
                 break;
             case 5:
                 start = std::chrono::high_resolution_clock::now();
                 integerLinearProgrammingApproach(truck, pallets, selectedPallets);
                 end = std::chrono::high_resolution_clock::now();
 
-                displayAlgorithmResult(5, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count());
+                optimalPallets = selectedPallets; // Assuming integer linear programming gives the optimal solution
+
+                displayAlgorithmResult(5, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
                 break;
             default:
                 break;
         }
 
-        std::cout << "\nPress any key to go back to the menu.";
+        std::cout << "\nPress enter to go back to the menu.";
         std::string wait;
         std::getline(std::cin, wait);
     }    
