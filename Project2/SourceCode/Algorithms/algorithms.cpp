@@ -1,5 +1,7 @@
 #include "algorithms.h"
 
+#include <algorithm>
+
 /**
  * @file algorithms.cpp
  * @brief This file contains the implementations of various algorithms for solving the pallet packing problem declared in algorithms.h.
@@ -44,7 +46,17 @@ void backtrackingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vecto
 }
 
 void greedyApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
-    std::cout << "Greedy Approach\n";
+    std::sort(pallets.begin(), pallets.end(),
+        [](Pallet& pallet1, Pallet& pallet2) {return (double)(pallet1.profit) / pallet1.weight > (double)(pallet2.profit)/pallet2.weight; });
+
+    int selectedPalletsWeightSum = 0;
+    for (int i = 0; i< pallets.size(); i++) {
+
+        if (pallets[i].weight + selectedPalletsWeightSum <= truck.capacity) {
+            selectedPallets[i] = true;
+            selectedPalletsWeightSum += pallets[i].weight;
+        }
+    }
 }
 
 void dynamicProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
