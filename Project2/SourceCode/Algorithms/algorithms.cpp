@@ -63,7 +63,33 @@ void greedyApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool
 }
 
 void dynamicProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
-    std::cout << "Dynamic Programming Approach\n";
+    int n = pallets.size();
+    int W = truck.capacity;
+
+    std::vector selected(n + 1, std::vector(W + 1, false)); // tabela de valores
+
+    std::vector dp(W + 1, 0); // como só precisamos do estado de profit para cada pallet, a tabela pode ser 1D
+
+    for (int i = 0 ; i < n ; i++) {
+        for (int w = W; w >= 0 ; w--) {
+            if (pallets[i].weight <= w) {
+                int include = pallets[i].profit + dp[w - pallets[i].weight];
+                if (include > dp[w]) {
+                    dp[w] = include;
+                    selected[i+1][w] = true;
+                }
+            }
+        }
+    }
+
+    int w = W;
+    for (int i = n; i > 0; i--) {
+        if (selected[i][w]) {
+            selectedPallets[pallets[i - 1].id - 1] = true;
+            w -= pallets[i - 1].weight;
+        }
+    }
+
 }
 
 void integerLinearProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
