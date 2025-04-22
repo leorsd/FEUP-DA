@@ -50,11 +50,14 @@ void greedyApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool
         [](Pallet& pallet1, Pallet& pallet2) {return (double)(pallet1.profit) / pallet1.weight > (double)(pallet2.profit)/pallet2.weight; });
 
     int selectedPalletsWeightSum = 0;
+    int numberOfPallets = 0;
     for (int i = 0; i< pallets.size(); i++) {
-
-        if (pallets[i].weight + selectedPalletsWeightSum <= truck.capacity) {
-            selectedPallets[i] = true;
-            selectedPalletsWeightSum += pallets[i].weight;
+        if (numberOfPallets < truck.availablePallets) {
+            if (pallets[i].weight + selectedPalletsWeightSum <= truck.capacity ) {
+                selectedPallets[i] = true;
+                selectedPalletsWeightSum += pallets[i].weight;
+                numberOfPallets++;
+            }
         }
     }
 }
