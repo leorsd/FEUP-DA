@@ -11,6 +11,7 @@ void bruteForceApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<
     std::cout << "Brute Force Approach\n";
 }
 
+
 void backtrackingRecursion(Truck& truck, std::vector<Pallet>& pallets, int index, int currentValue, int currentWeigth, int& bestValue, std::vector<int>& remainValue, std::vector<bool>& currentPallets, std::vector<bool>& bestSelection) {
 
     if ( index == truck.availablePallets) {
@@ -46,50 +47,45 @@ void backtrackingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vecto
 }
 
 void greedyApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
+
     std::sort(pallets.begin(), pallets.end(),
         [](Pallet& pallet1, Pallet& pallet2) {return (double)(pallet1.profit) / pallet1.weight > (double)(pallet2.profit)/pallet2.weight; });
 
+        
     int selectedPalletsWeightSum = 0;
-    int numberOfPallets = 0;
-    for (int i = 0; i< pallets.size(); i++) {
-        if (numberOfPallets < truck.availablePallets) {
-            if (pallets[i].weight + selectedPalletsWeightSum <= truck.capacity ) {
-                selectedPallets[i] = true;
-                selectedPalletsWeightSum += pallets[i].weight;
-                numberOfPallets++;
-            }
+    for (int i = 0; i < pallets.size(); i++) {
+        if (pallets[i].weight + selectedPalletsWeightSum <= truck.capacity ) {
+            selectedPallets[i] = true;
+            selectedPalletsWeightSum += pallets[i].weight;
+        }else {
+            selectedPallets[i] = false;
         }
     }
 }
 
 void dynamicProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
-    int n = pallets.size();
-    int W = truck.capacity;
 
-    std::vector selected(n + 1, std::vector(W + 1, false)); // tabela de valores
+    std::vector<int> dp(truck.capacity + 1, 0);
 
-    std::vector dp(W + 1, 0); // como só precisamos do estado de profit para cada pallet, a tabela pode ser 1D
+    std::vector<int> lastWeight(truck.capacity + 1, -1);
 
-    for (int i = 0 ; i < n ; i++) {
-        for (int w = W; w >= 0 ; w--) {
-            if (pallets[i].weight <= w) {
-                int include = pallets[i].profit + dp[w - pallets[i].weight];
-                if (include > dp[w]) {
-                    dp[w] = include;
-                    selected[i+1][w] = true;
-                }
+
+    for (int i = 0; i < truck.availablePallets; i++) {
+        for (int w = truck.capacity; w >= pallets[i].weight; w--) {
+            int include = pallets[i].profit + dp[w - pallets[i].weight];
+            if (include > dp[w]) {
+                dp[w] = include;
+                lastWeight[w] = i; 
             }
         }
     }
 
-    int w = W;
-    for (int i = n; i > 0; i--) {
-        if (selected[i][w]) {
-            selectedPallets[pallets[i - 1].id - 1] = true;
-            w -= pallets[i - 1].weight;
-        }
+    int wei = truck.capacity;
+    while (wei > 0 && lastWeight[wei] != -1) {
+        int palletIndex = lastWeight[wei];
+        selectedPallets[palletIndex] = true;
+        wei -= pallets[palletIndex].weight;
     }
-
 }
 
 void integerLinearProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {

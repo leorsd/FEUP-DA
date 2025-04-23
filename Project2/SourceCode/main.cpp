@@ -128,7 +128,7 @@ int main(){
                 greedyApproach(truck, pallets, selectedPallets);
                 end = std::chrono::high_resolution_clock::now();
 
-                backtrackingApproach(truck, pallets, optimalPallets); // Uses backtracking to find the optimal solution
+                dynamicProgrammingApproach(truck, pallets, optimalPallets); // Uses dynamic programming to find the optimal solution
 
                 displayAlgorithmResult(3, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
                 break;

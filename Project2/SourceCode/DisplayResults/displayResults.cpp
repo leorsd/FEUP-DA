@@ -60,11 +60,21 @@ void displayAlgorithmResult(int algorithm, Truck& truck, std::vector<Pallet>& pa
 
     int totalWeight = 0;
     int totalProfit = 0;
+
+    int maxProfit = 0;
+    int maxWeight = 0;
+    std::string optimalPalletsString = "Optimal Pallets IDs: ";
+
     for (size_t i = 0; i < pallets.size(); ++i){
         if (selectedPallets[i]){
             totalWeight += pallets[i].weight;
             totalProfit += pallets[i].profit;
             std::cout << pallets[i].id << " ";
+        }
+        if (optimalPallets[i]){
+            maxProfit += pallets[i].profit;
+            maxWeight += pallets[i].weight;
+            optimalPalletsString += std::to_string(pallets[i].id) + " ";
         }
     }
     std::cout << "\n";
@@ -74,27 +84,15 @@ void displayAlgorithmResult(int algorithm, Truck& truck, std::vector<Pallet>& pa
     std::cout << "Running time: " << elapsedTime / 1000 << " milliseconds\n";
     std::cout << "Running time: " << elapsedTime / 1000000 << " seconds\n";
 
-    if ( optimalPallets == selectedPallets){
-        std::cout << "\nThe selected algorithm found the optimal solution.\n";
+    if (totalProfit == maxProfit){
+        std::cout << "\nFinal Result: The selected algorithm found the optimal solution.\n";
     }else{
 
     std::cout << "\n--Results of the optimal solution--\n";
 
-    std::cout << "Optimal solution Pallets IDs: ";
-
-
-    int totalWeightOptimal = 0;
-    int totalProfitOptimal = 0;
-    for (size_t i = 0; i < pallets.size(); ++i){
-        if (optimalPallets[i]){
-            totalWeightOptimal += pallets[i].weight;
-            totalProfitOptimal += pallets[i].profit;
-            std::cout << pallets[i].id << " ";
-        }
-    }
-    std::cout << "\n";
-    std::cout << "Capacity used: " << totalWeightOptimal << " of " << truck.capacity << "\n";
-    std::cout << "Total profit: " << totalProfitOptimal << "\n";
-    std::cout << "\nThe selected algorithm did not find the optimal solution.\n";
+    std::cout << optimalPalletsString << "\n";
+    std::cout << "Capacity used: " << maxWeight << " of " << truck.capacity << "\n";
+    std::cout << "Total profit: " << maxProfit << "\n";
+    std::cout << "\nFinal Result: The selected algorithm did not find the optimal solution.\n";
     }
 }
