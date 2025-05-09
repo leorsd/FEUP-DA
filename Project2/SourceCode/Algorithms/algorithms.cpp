@@ -7,44 +7,51 @@
  * @brief This file contains the implementations of various algorithms for solving the pallet packing problem declared in algorithms.h.
  */
 
+
 void bruteForceApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
     std::cout << "Brute Force Approach\n";
 }
 
 
-void backtrackingRecursion(Truck& truck, std::vector<Pallet>& pallets, int index, int currentValue, int currentWeigth, int& bestValue, std::vector<int>& remainValue, std::vector<bool>& currentPallets, std::vector<bool>& bestSelection) {
+void backtrackingRecursion(Truck& truck, std::vector<Pallet>& pallets, int index,int currentValue, int currentWeight, int currentCount,int& bestValue,
+    int& bestCount, std::vector<int>& remainValue,std::vector<bool>& currentPallets,std::vector<bool>& bestSelection) {
 
-    if ( index == truck.availablePallets) {
-        if (currentValue > bestValue) {
+    if (index == truck.availablePallets) {
+        if (currentValue > bestValue || (currentValue == bestValue && currentCount < bestCount)) {
             bestValue = currentValue;
+            bestCount = currentCount;
             bestSelection = currentPallets;
         }
         return;
     }
 
-    if ( currentValue + remainValue[index] <= bestValue) {
+    if ( currentValue + remainValue[index] < bestValue) {
         return;
     }
 
-    backtrackingRecursion(truck, pallets, index + 1, currentValue, currentWeigth, bestValue, remainValue, currentPallets, bestSelection);
+    backtrackingRecursion(truck, pallets, index + 1, currentValue, currentWeight, currentCount, bestValue, bestCount, remainValue, currentPallets, bestSelection);
 
-    if ( currentWeigth + pallets[index].weight <= truck.capacity) {
+    if ( currentWeight + pallets[index].weight <= truck.capacity) {
         currentPallets[index] = true;
-        backtrackingRecursion(truck, pallets, index + 1, currentValue + pallets[index].profit, currentWeigth + pallets[index].weight, bestValue, remainValue, currentPallets, bestSelection);
+        backtrackingRecursion(truck, pallets, index + 1, currentValue + pallets[index].profit, currentWeight + pallets[index].weight,
+            currentCount + 1, bestValue, bestCount, remainValue, currentPallets, bestSelection);
         currentPallets[index] = false;
     }
 }
 
 void backtrackingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
-    std::vector<int> remainValue(truck.capacity + 1, 0);
+    std::vector<int> remainValue(truck.availablePallets, 0);
     for (int i = pallets.size()-1; i >=0 ; i--) {
         remainValue[i] = remainValue[i + 1] + pallets[i].profit;
     }
 
     std::vector<bool> currentSelected(pallets.size());
     int bestValue = 0;
-    backtrackingRecursion(truck, pallets, 0, 0, 0, bestValue, remainValue, currentSelected, selectedPallets);
+    int bestCount = truck.availablePallets + 1;
+    backtrackingRecursion(truck, pallets, 0, 0, 0, 0, bestValue, bestCount, remainValue, currentSelected, selectedPallets);
 }
+
+
 
 void greedyApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
 
@@ -63,28 +70,37 @@ void greedyApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool
     }
 }
 
+
+
 void dynamicProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
+    int n = truck.availablePallets;
+    int W = truck.capacity;
 
-    std::vector<int> dp(truck.capacity + 1, 0);
+    std::vector<std::vector<int>> dp(n + 1, std::vector<int>(W + 1, 0));
 
-    std::vector<int> lastWeight(truck.capacity + 1, -1);
+    for (int i = 1; i <= n; ++i) {
+        int wt = pallets[i - 1].weight;
+        int val = pallets[i - 1].profit;
 
+        for (int w = 0; w <= W; ++w) {
+            dp[i][w] = dp[i - 1][w];
 
-    for (int i = 0; i < truck.availablePallets; i++) {
-        for (int w = truck.capacity; w >= pallets[i].weight; w--) {
-            int include = pallets[i].profit + dp[w - pallets[i].weight];
-            if (include > dp[w]) {
-                dp[w] = include;
-                lastWeight[w] = i; 
+            if (wt <= w) {
+                int newProfit = val + dp[i - 1][w - wt];
+
+                if (newProfit > dp[i][w]) {
+                    dp[i][w] = newProfit;
+                }
             }
         }
     }
 
-    int wei = truck.capacity;
-    while (wei > 0 && lastWeight[wei] != -1) {
-        int palletIndex = lastWeight[wei];
-        selectedPallets[palletIndex] = true;
-        wei -= pallets[palletIndex].weight;
+    int w = W;
+    for (int i = n; i > 0 && w >= 0; --i) {
+        if (dp[i][w] != dp[i - 1][w]) {
+            selectedPallets[i - 1] = true;
+            w -= pallets[i - 1].weight;
+        }
     }
 }
 
