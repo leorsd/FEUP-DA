@@ -11,20 +11,13 @@
     switch(algorithm){
         case 1:
             std::cout << " Brute Force Approach.\n";
+            std::cout << "Due to the exponential complexity time of the brute force approach, it is limit to a maximum input size  of 25 pallets.\n";
+            std::cout << "An input size bigger than 25 will take to much time to compute.\n";
             break;
         case 2:
             std::cout << " Backtracking Approach.\n";
-            std::cout << "The maximum input size for the backtracking algorithm is 30 pallets as it uses a recursive approach.\n";
-            std::cout << "An input size bigger than 30 will lead to memory issues.\n";
-            break;
-        case 3:
-            std::cout << " Greedy Approach.\n";
-            break;
-        case 4:
-            std::cout << " Dynamic Programming Approach.\n";
-            break;
-        case 5:
-            std::cout << " Integer Linear Programming Approach.\n";
+            std::cout << "Due to the exponential complexity time of the backtracking approach, it is limit to a maximum input size of 25 pallets.\n";
+            std::cout << "An input size bigger than 25 will take to much time to compute.\n";
             break;
         default:
             break;
@@ -87,12 +80,11 @@ void displayAlgorithmResult(int algorithm, Truck& truck, std::vector<Pallet>& pa
     if (totalProfit == maxProfit){
         std::cout << "\nFinal Result: The selected algorithm found the optimal solution.\n";
     }else{
+        std::cout << "\n--Results of the optimal solution--\n";
 
-    std::cout << "\n--Results of the optimal solution--\n";
-
-    std::cout << optimalPalletsString << "\n";
-    std::cout << "Capacity used: " << maxWeight << " of " << truck.capacity << "\n";
-    std::cout << "Total profit: " << maxProfit << "\n";
-    std::cout << "\nFinal Result: The selected algorithm did not find the optimal solution.\n";
+        std::cout << optimalPalletsString << "\n";
+        std::cout << "Capacity used: " << maxWeight << " of " << truck.capacity << "\n";
+        std::cout << "Total profit: " << maxProfit << "\n";
+        std::cout << "\nFinal Result: The selected algorithm did not find the optimal solution.\n";
     }
 }

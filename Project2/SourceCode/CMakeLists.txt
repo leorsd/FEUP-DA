@@ -28,6 +28,7 @@ set(HEADERS
 
 # Include directories
 include_directories(
+        ${CMAKE_SOURCE_DIR}/
         ${CMAKE_SOURCE_DIR}/DataStructures
         ${CMAKE_SOURCE_DIR}/Algorithms
         ${CMAKE_SOURCE_DIR}/DisplayResults

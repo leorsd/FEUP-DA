@@ -102,16 +102,21 @@ int main(){
 
         switch (algorithmChoice){
             case 1:
-                start = std::chrono::high_resolution_clock::now();
-                bruteForceApproach(truck, pallets, selectedPallets);
-                end = std::chrono::high_resolution_clock::now();
+                if (truck.availablePallets > 25){
+                    displayInputSizeToBig(1, truck.availablePallets);
+                }
+                else{
+                    start = std::chrono::high_resolution_clock::now();
+                    bruteForceApproach(truck, pallets, selectedPallets);
+                    end = std::chrono::high_resolution_clock::now();
 
-                optimalPallets = selectedPallets; // Assuming brute force gives the optimal solution
+                    optimalPallets = selectedPallets; // Assuming brute force gives the optimal solution
 
-                displayAlgorithmResult(1, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+                    displayAlgorithmResult(1, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
+                }
                 break;
             case 2:
-                if (truck.availablePallets > 30){
+                if (truck.availablePallets > 25){
                     displayInputSizeToBig(2, truck.availablePallets);
                 }else{
                     start = std::chrono::high_resolution_clock::now();
@@ -128,7 +133,7 @@ int main(){
                 greedyApproach(truck, pallets, selectedPallets);
                 end = std::chrono::high_resolution_clock::now();
 
-                dynamicProgrammingApproach(truck, pallets, optimalPallets); // Uses dynamic programming to find the optimal solution
+                dynamicProgrammingApproach(truck, pallets, optimalPallets); // Uses dynamic programming to find the optimal solution and compatare with greedy
 
                 displayAlgorithmResult(3, truck, pallets, selectedPallets, optimalPallets, std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
                 break;
