@@ -9,7 +9,45 @@
 
 
 void bruteForceApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
-    std::cout << "Brute Force Approach\n";
+    int n = pallets.size();
+    int maxProfit = 0;
+    int maxNumberOfPallets = 0;
+    int maxFirstPallet = n + 1;
+    std::vector<bool> bestCombination(n, false);
+
+    for (int mask = 0; mask < (1 << n); mask++) {
+        int currentWeight = 0;
+        int currentProfit = 0;
+        int currentNumberOfPallets = 0;
+        int firstPallet = n + 1;
+        std::vector<bool> currentCombination(n, false);
+
+        for (int i = 0; i < n; i++) {
+            if (mask & (1 << i)) {
+                if (i<firstPallet) {
+                    firstPallet = i;
+                }
+                currentNumberOfPallets++;
+                currentWeight += pallets[i].weight;
+                currentProfit += pallets[i].profit;
+                currentCombination[i] = true;
+            }
+        }
+
+        if (currentWeight <= truck.capacity && currentProfit > maxProfit) {
+            maxProfit = currentProfit;
+            bestCombination = currentCombination;
+        }else if (currentWeight <= truck.capacity && currentProfit == maxProfit) {
+            if (currentNumberOfPallets < maxNumberOfPallets) {
+                maxNumberOfPallets = currentNumberOfPallets;
+                bestCombination = currentCombination;
+            } else if (currentNumberOfPallets == maxNumberOfPallets && firstPallet < maxFirstPallet) {
+                maxFirstPallet = firstPallet;
+                bestCombination = currentCombination;
+            }
+        }
+    }
+    selectedPallets = bestCombination;
 }
 
 
