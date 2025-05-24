@@ -5,7 +5,7 @@
  * @file pallet.h
  * @brief Definition of the Pallet structure.
  * 
- * This file contains the definition of the Pallet structure, which is used to represent pallet data.
+ * @details This file contains the definition of the Pallet structure, which is used to represent pallet data.
  */
 
 /**

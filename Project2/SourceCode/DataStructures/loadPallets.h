@@ -9,7 +9,7 @@
  * @file loadPallets.h
  * @brief Function declaration for loading pallets data from a CSV file.
  * 
- * This file contains the function declaration for reading pallets data from a CSV file and populating a vector of Pallet structs. 
+ * @details This file contains the function declaration for reading pallets data from a CSV file and populating a vector of Pallet structs. 
  * The corresponding function implementation is in loadPallets.cpp.
  */
 

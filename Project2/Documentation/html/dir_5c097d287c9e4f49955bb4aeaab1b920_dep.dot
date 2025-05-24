@@ -1,0 +1,18 @@
+digraph "SourceCode/build/CMakeFiles/DA_Project.dir"
+{
+ // LATEX_PDF_SIZE
+  bgcolor="transparent";
+  edge [fontname=Helvetica,fontsize=10,labelfontname=Helvetica,labelfontsize=10];
+  node [fontname=Helvetica,fontsize=10,shape=box,height=0.2,width=0.4];
+  compound=true
+  subgraph clusterdir_0a68f6a41534be0bb59f4e1a524cda4c {
+    graph [ bgcolor="#edf0f7", pencolor="grey50", label="CMakeFiles", fontname=Helvetica,fontsize=10 style="filled,dashed", URL="dir_0a68f6a41534be0bb59f4e1a524cda4c.html",tooltip=""]
+  subgraph clusterdir_5c097d287c9e4f49955bb4aeaab1b920 {
+    graph [ bgcolor="#edf0f7", pencolor="grey25", label="", fontname=Helvetica,fontsize=10 style="filled,bold", URL="dir_5c097d287c9e4f49955bb4aeaab1b920.html",tooltip=""]
+    dir_5c097d287c9e4f49955bb4aeaab1b920 [shape=plaintext, label="DA_Project.dir"];
+  dir_a3a00485ade1f0f5fdeca20daf295ebe [label="Algorithms", fillcolor="#a2b4d6", color="grey25", style="filled", URL="dir_a3a00485ade1f0f5fdeca20daf295ebe.html",tooltip=""];
+  dir_1b82834da8b9a42eca49b8e1997b35e6 [label="DataStructures", fillcolor="#a2b4d6", color="grey25", style="filled", URL="dir_1b82834da8b9a42eca49b8e1997b35e6.html",tooltip=""];
+  dir_3e1f675df0aee800438866529b04d796 [label="DisplayResults", fillcolor="#a2b4d6", color="grey25", style="filled", URL="dir_3e1f675df0aee800438866529b04d796.html",tooltip=""];
+  }
+  }
+}
