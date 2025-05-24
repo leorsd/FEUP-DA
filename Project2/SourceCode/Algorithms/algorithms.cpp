@@ -1,6 +1,7 @@
 #include "algorithms.h"
 
 #include <algorithm>
+#include <chrono>
 
 /**
  * @file algorithms.cpp
@@ -143,5 +144,21 @@ void dynamicProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std:
 }
 
 void integerLinearProgrammingApproach(Truck& truck, std::vector<Pallet>& pallets, std::vector<bool>& selectedPallets) {
-    std::cout << "Integer Linear Programming Approach\n";
+
+    std::ofstream out("../SolverIlp/input.txt");
+    out << truck.capacity << " " << pallets.size() << "\n";
+    for (const auto& p : pallets)
+        out << p.weight << " " << p.profit << "\n";
+    out.close();
+
+    std::system("python3 ../SolverIlp/knapsack_solver.py");
+
+    selectedPallets.assign(pallets.size(), false);
+    std::ifstream in("../SolverIlp/output.txt");
+    for (size_t i = 0; i < pallets.size(); ++i) {
+        int val;
+        in >> val;
+        selectedPallets[i] = (val == 1);
+    }
+    in.close();
 }
