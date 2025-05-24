@@ -5,6 +5,10 @@
 #include "pallet.h"
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <cstdlib>
+#include <sstream>
+
 
 /**
  * @file algorithms.h
