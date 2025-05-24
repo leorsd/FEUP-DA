@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['da2025_5fprj2_5ft04g2_0',['da2025_prj2_t04g2',['../index.html',1,'DA2025_PRJ2_T04G2'],['../index.html#autotoc_md0',1,'DA2025_PRJ2_T04G2']]],
+  ['displayalgorithmresult_1',['displayalgorithmresult',['../displayResults_8cpp.html#a0b9a6d5855f59b41c26ea669649685e2',1,'displayAlgorithmResult(int algorithm, Truck &amp;truck, std::vector&lt; Pallet &gt; &amp;pallets, std::vector&lt; bool &gt; &amp;selectedPallets, std::vector&lt; bool &gt; &amp;optimalPallets, double elapsedTime):&#160;displayResults.cpp'],['../displayResults_8h.html#a0b9a6d5855f59b41c26ea669649685e2',1,'displayAlgorithmResult(int algorithm, Truck &amp;truck, std::vector&lt; Pallet &gt; &amp;pallets, std::vector&lt; bool &gt; &amp;selectedPallets, std::vector&lt; bool &gt; &amp;optimalPallets, double elapsedTime):&#160;displayResults.cpp']]],
+  ['displayinputsizetobig_2',['displayinputsizetobig',['../displayResults_8cpp.html#a685e53f681b0397df8bdc4163a34d33e',1,'displayInputSizeToBig(int algorithm, int inputSize):&#160;displayResults.cpp'],['../displayResults_8h.html#a685e53f681b0397df8bdc4163a34d33e',1,'displayInputSizeToBig(int algorithm, int inputSize):&#160;displayResults.cpp']]],
+  ['displayresults_2ecpp_3',['displayResults.cpp',['../displayResults_8cpp.html',1,'']]],
+  ['displayresults_2eh_4',['displayResults.h',['../displayResults_8h.html',1,'']]],
+  ['dynamicprogrammingapproach_5',['dynamicprogrammingapproach',['../algorithms_8cpp.html#a15fdc60dce3406b68d9787bf129de724',1,'dynamicProgrammingApproach(Truck &amp;truck, std::vector&lt; Pallet &gt; &amp;pallets, std::vector&lt; bool &gt; &amp;selectedPallets):&#160;algorithms.cpp'],['../algorithms_8h.html#a15fdc60dce3406b68d9787bf129de724',1,'dynamicProgrammingApproach(Truck &amp;truck, std::vector&lt; Pallet &gt; &amp;pallets, std::vector&lt; bool &gt; &amp;selectedPallets):&#160;algorithms.cpp']]]
+];

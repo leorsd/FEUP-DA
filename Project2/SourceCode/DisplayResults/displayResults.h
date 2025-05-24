@@ -25,6 +25,8 @@
 /**
  * @brief Function to display the results of the algorithm.
  * 
+ * @details This function displays the results of the selected algorithm, including the algorithm used, the IDs of the selected pallets, their total weight and profit, and the running time of the algorithm used.
+ * 
  * @param algorithm The algorithm used (1-5).
  * @param truck The truck structure containing truck data.
  * @param pallets A vector of pallets to be packed.

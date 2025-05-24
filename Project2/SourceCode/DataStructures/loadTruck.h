@@ -8,7 +8,7 @@
  * @file loadTruck.h
  * @brief Function declaration for loading truck data from a CSV file.
  * 
- * This file contains the function declaration for reading truck data from a CSV file and populating the Truck structure. 
+ * @details This file contains the function declaration for reading truck data from a CSV file and populating the Truck structure. 
  * The corresponding function implementation is in loadTruck.cpp.
  */
 

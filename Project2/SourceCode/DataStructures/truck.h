@@ -5,7 +5,7 @@
  * @file truck.h
  * @brief Definition of truck structures used in the project.
  * 
- * This file contains the definition of the Truck structure, which is used to represent truck data.
+ * @details This file contains the definition of the Truck structure, which is used to represent truck data.
  */
 
 

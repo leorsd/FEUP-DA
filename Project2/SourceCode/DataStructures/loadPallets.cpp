@@ -6,6 +6,7 @@
  * 
  * This file contains the function implementation for the loadPallets function declared in loadPallets.h.
  */
+
 bool loadPallets(int choice, int n_pallets, std::vector<Pallet>& pallets) {
     std::string pallets_filename;
 
